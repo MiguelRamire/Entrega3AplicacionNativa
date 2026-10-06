@@ -12,7 +12,12 @@
           "package_name": "com.example.petshield"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "890989965486-ah9in9i6prg9cm33l7pr3vbjgmesgtla.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyD7Kg6dGyH6T2NuBwoPMU1pW4GZiYXgAfk"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890989965486-ah9in9i6prg9cm33l7pr3vbjgmesgtla.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

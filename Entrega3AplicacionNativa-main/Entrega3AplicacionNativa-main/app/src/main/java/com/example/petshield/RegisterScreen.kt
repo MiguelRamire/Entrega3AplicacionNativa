@@ -1,11 +1,10 @@
-package com.example.petshield // Verifica que coincida con tu paquete
+package com.example.petshield
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -26,6 +25,7 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
+    viewModel: PetShieldViewModel = PetShieldViewModel(),
     onBack: () -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
@@ -33,6 +33,9 @@ fun RegisterScreen(
     var password by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
+
+    var errorMessage by remember { mutableStateOf<String?>(null) }
+    var cargando by remember { mutableStateOf(false) }
 
     val colorDegradadoInicio = Color(0xFF33E4DB)
     val colorDegradadoFin = Color(0xFF00BBD3)
@@ -66,33 +69,48 @@ fun RegisterScreen(
             )
         }
 
-        // --- CONTENIDO DESLIZABLE (SCROLL) ---
+        // --- FORMULARIO CON SCROLL ---
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 32.dp)
-                .verticalScroll(rememberScrollState()), // Activa el scroll al abrir el teclado
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 32.dp, vertical = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(32.dp))
-
             Text(
-                text = "¡Bienvenido A PetShield!",
+                text = "Crea tu Cuenta",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = colorDegradadoInicio,
-                modifier = Modifier.align(Alignment.Start)
+                modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Muestra mensaje de error si existe
+            errorMessage?.let { msg ->
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEBEE)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                ) {
+                    Text(
+                        text = msg,
+                        color = Color.Red,
+                        fontSize = 13.sp,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
 
             // 1. Campo Nombre
             Text(text = "Nombre completo", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = name,
-                onValueChange = { name = it },
-                placeholder = { Text("sara maria perez", color = colorDegradadoInicio) },
+                onValueChange = { name = it; errorMessage = null },
+                placeholder = { Text("Ej. Juan Pérez", color = colorDegradadoInicio) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
@@ -113,8 +131,8 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it },
-                placeholder = { Text("*************", color = colorDegradadoInicio) },
+                onValueChange = { password = it; errorMessage = null },
+                placeholder = { Text("Mínimo 6 caracteres", color = colorDegradadoInicio) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -136,7 +154,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = { email = it; errorMessage = null },
                 placeholder = { Text("example@example.com", color = colorDegradadoInicio) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -158,8 +176,8 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = phone,
-                onValueChange = { phone = it },
-                placeholder = { Text("+01 111-1111111", color = colorDegradadoInicio) },
+                onValueChange = { phone = it; errorMessage = null },
+                placeholder = { Text("+57 300 000 0000", color = colorDegradadoInicio) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
@@ -173,9 +191,8 @@ fun RegisterScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
-            // --- FOOTER (Términos, Botones y Login) ---
             Text(
                 text = "Al continuar, aceptas los\nTérminos de Uso y Política de Privacidad.",
                 fontSize = 10.sp,
@@ -185,8 +202,30 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // BOTÓN REGISTRARSE
             Button(
-                onClick = { /* Lógica de registro */ },
+                onClick = {
+                    if (name.isBlank() || email.isBlank() || password.isBlank()) {
+                        errorMessage = "Por favor completa todos los campos obligatorios"
+                        return@Button
+                    }
+                    if (password.length < 6) {
+                        errorMessage = "La contraseña debe tener al menos 6 caracteres"
+                        return@Button
+                    }
+                    cargando = true
+                    errorMessage = null
+
+                    viewModel.registrarUsuario(email, password, name, phone) { exito, errorMsg ->
+                        cargando = false
+                        if (exito) {
+                            onNavigateToLogin()
+                        } else {
+                            errorMessage = errorMsg ?: "Error al registrar el usuario"
+                        }
+                    }
+                },
+                enabled = !cargando,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -197,29 +236,19 @@ fun RegisterScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 contentPadding = PaddingValues()
             ) {
-                Text("Registrarse", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                if (cargando) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                } else {
+                    Text("Registrarse", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text("o registrate con:", fontSize = 12.sp, color = Color.Gray)
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .background(colorDegradadoInicio, CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("G", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            }
-
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Row {
-                Text("¿Ya tienes cuenta? ", fontSize = 12.sp, color = Color.Gray)
+                Text("¿Ya tienes una cuenta? ", fontSize = 12.sp, color = Color.Gray)
                 Text(
-                    text = "Inicia sesion",
+                    text = "Inicia Sesión",
                     fontSize = 12.sp,
                     color = colorDegradadoFin,
                     fontWeight = FontWeight.Bold,
@@ -227,7 +256,7 @@ fun RegisterScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(32.dp)) // Espacio final para que el scroll termine limpio
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }

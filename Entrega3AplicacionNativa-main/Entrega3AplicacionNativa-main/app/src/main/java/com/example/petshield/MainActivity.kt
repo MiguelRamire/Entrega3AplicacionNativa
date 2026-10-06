@@ -54,6 +54,7 @@ fun PetShieldApp() {
 
         "login" -> {
             LoginScreen(
+                viewModel = viewModel,
                 onBack = { pantallaActual = "welcome" },
                 onNavigateToRegister = { pantallaActual = "register_from_login" },
                 onNavigateToRecover = { pantallaActual = "recover" },
@@ -71,6 +72,7 @@ fun PetShieldApp() {
         "register", "register_from_login" -> {
             val origenLogin = pantallaActual == "register_from_login"
             RegisterScreen(
+                viewModel = viewModel,
                 onBack = {
                     pantallaActual = if (origenLogin) "login" else "welcome"
                 },

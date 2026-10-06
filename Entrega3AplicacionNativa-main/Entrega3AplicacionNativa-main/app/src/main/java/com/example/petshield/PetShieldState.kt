@@ -4,6 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.example.petshield.data.CitaModel
+import com.example.petshield.data.FirebaseRepository
+import com.example.petshield.data.MascotaModel
 
 data class Mascota(
     val id: String,
@@ -60,8 +63,11 @@ data class DatosReserva(
     val total: String = "$68.500"
 )
 
-class PetShieldViewModel {
+class PetShieldViewModel(
+    private val repository: FirebaseRepository = FirebaseRepository()
+) {
     // Usuario
+    var usuarioId by mutableStateOf("usuario_demo")
     var usuarioNombre by mutableStateOf("Ada")
     var usuarioTelefono by mutableStateOf("+123 567 89000")
     var usuarioEmail by mutableStateOf("Janedoe@example.com")
@@ -99,8 +105,149 @@ class PetShieldViewModel {
     // Cita seleccionada para cancelar
     var citaACancelar by mutableStateOf<Cita?>(null)
 
+    init {
+        val currentUser = repository.obtenerUsuarioActual()
+        if (currentUser != null) {
+            usuarioId = currentUser.uid
+            usuarioEmail = currentUser.email ?: ""
+            cargarDatosUsuario(currentUser.uid)
+        }
+        cargarMascotasDesdeFirebase()
+    }
+
+    fun cargarDatosUsuario(uid: String) {
+        repository.obtenerUsuario(uid) { perfil ->
+            if (perfil != null) {
+                usuarioNombre = perfil.nombre.ifBlank { usuarioNombre }
+                usuarioTelefono = perfil.telefono.ifBlank { usuarioTelefono }
+                usuarioEmail = perfil.correo.ifBlank { usuarioEmail }
+            }
+        }
+    }
+
+    fun iniciarSesion(
+        email: String,
+        pass: String,
+        onResult: (Boolean, String?) -> Unit
+    ) {
+        if (email.isBlank() || pass.isBlank()) {
+            onResult(false, "Por favor ingresa tu correo y contraseña")
+            return
+        }
+        repository.iniciarSesion(email, pass) { exito, error ->
+            if (exito) {
+                val currentUser = repository.obtenerUsuarioActual()
+                if (currentUser != null) {
+                    usuarioId = currentUser.uid
+                    usuarioEmail = currentUser.email ?: ""
+                    cargarDatosUsuario(currentUser.uid)
+                    cargarMascotasDesdeFirebase()
+                }
+                onResult(true, null)
+            } else {
+                onResult(false, error ?: "Correo o contraseña incorrectos")
+            }
+        }
+    }
+
+    fun iniciarSesionConGoogle(
+        idToken: String,
+        onResult: (Boolean, String?) -> Unit
+    ) {
+        repository.iniciarSesionConGoogleToken(idToken) { exito, error ->
+            if (exito) {
+                val currentUser = repository.obtenerUsuarioActual()
+                if (currentUser != null) {
+                    usuarioId = currentUser.uid
+                    usuarioNombre = currentUser.displayName ?: usuarioNombre
+                    usuarioEmail = currentUser.email ?: usuarioEmail
+                    cargarDatosUsuario(currentUser.uid)
+                    cargarMascotasDesdeFirebase()
+                }
+                onResult(true, null)
+            } else {
+                onResult(false, error ?: "Error al iniciar sesión con Google")
+            }
+        }
+    }
+
+    fun registrarUsuario(
+        email: String,
+        pass: String,
+        nombre: String,
+        telefono: String,
+        onResult: (Boolean, String?) -> Unit
+    ) {
+        if (email.isBlank() || pass.isBlank() || nombre.isBlank()) {
+            onResult(false, "Por favor completa todos los campos obligatorios")
+            return
+        }
+        if (pass.length < 6) {
+            onResult(false, "La contraseña debe tener al menos 6 caracteres")
+            return
+        }
+        repository.registrarUsuario(email, pass, nombre, telefono) { exito, error ->
+            if (exito) {
+                val currentUser = repository.obtenerUsuarioActual()
+                if (currentUser != null) {
+                    usuarioId = currentUser.uid
+                    usuarioNombre = nombre
+                    usuarioEmail = email
+                    usuarioTelefono = telefono
+                }
+                onResult(true, null)
+            } else {
+                onResult(false, error ?: "Error al registrar el usuario")
+            }
+        }
+    }
+
+    fun cerrarSesion() {
+        repository.cerrarSesion()
+        usuarioId = "anonimo"
+        usuarioNombre = ""
+        usuarioEmail = ""
+        usuarioTelefono = ""
+        mascotas.clear()
+    }
+
+    fun cargarMascotasDesdeFirebase() {
+        repository.obtenerMascotasPorUsuario(usuarioId) { listaFirebase ->
+            if (listaFirebase.isNotEmpty()) {
+                mascotas.clear()
+                listaFirebase.forEach { item ->
+                    mascotas.add(
+                        Mascota(
+                            id = item.id,
+                            nombre = item.nombre,
+                            especie = item.especie,
+                            raza = item.raza,
+                            peso = item.peso,
+                            fechaNacimiento = item.fechaNacimiento,
+                            sexo = item.sexo
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     fun agregarMascota(mascota: Mascota) {
         mascotas.add(mascota)
+
+        // Guardar en Firebase Firestore
+        val modeloFirestore = MascotaModel(
+            usuarioId = usuarioId,
+            nombre = mascota.nombre,
+            especie = mascota.especie,
+            raza = mascota.raza,
+            peso = mascota.peso,
+            fechaNacimiento = mascota.fechaNacimiento,
+            sexo = mascota.sexo
+        )
+        repository.agregarMascota(modeloFirestore) { exito, error ->
+            // Se guardó en Firestore
+        }
     }
 
     fun toggleFavoritoVet(id: String) {
@@ -132,9 +279,26 @@ class PetShieldViewModel {
             lugar = reservaActual.lugar
         )
         citas.add(0, nuevaCita)
+
+        // Guardar la cita en Firebase Firestore
+        val modeloCita = CitaModel(
+            usuarioId = usuarioId,
+            nombreMascota = reservaActual.mascotaNombre,
+            nombreClinica = reservaActual.lugar,
+            nombreServicio = reservaActual.servicioNombre,
+            fecha = reservaActual.fechaStr,
+            hora = reservaActual.horaStr,
+            estado = "Confirmada"
+        )
+        repository.crearCita(modeloCita) { exito, error ->
+            // Cita registrada en Firestore
+        }
     }
 
     fun cancelarCita(id: String) {
         citas.removeAll { it.id == id }
+        repository.cancelarCita(id, "Cancelada por el usuario") { exito ->
+            // Cita actualizada en Firestore
+        }
     }
 }
