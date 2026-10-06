@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.petshield.data.CitaModel
+import com.example.petshield.data.ClinicaModel
 import com.example.petshield.data.FirebaseRepository
 import com.example.petshield.data.MascotaModel
+import com.example.petshield.data.VeterinarioModel
 
 data class Mascota(
     val id: String,
@@ -31,11 +33,11 @@ data class Clinica(
 
 data class Veterinario(
     val id: String,
+    val clinicaId: String = "",
     val nombre: String,
     val especialidad: String,
     val clinicaTag: String,
-    var esFavorito: Boolean = true,
-    val emojiAvatar: String = "👩‍⚕️"
+    var esFavorito: Boolean = true
 )
 
 data class Cita(
@@ -51,13 +53,16 @@ data class Cita(
 )
 
 data class DatosReserva(
+    val clinicaId: String = "",
+    val servicioId: String = "",
+    val mascotaId: String = "",
     val mascotaNombre: String = "Max · Golden Retriever",
     val servicioNombre: String = "Consulta veterinaria general",
     val profesionalNombre: String = "Dra. Ana Jiménez, MV",
     val fechaStr: String = "Miércoles, 23 de septiembre",
     val horaStr: String = "3:00 PM",
     val modalidad: String = "En clínica",
-    val lugar: String = "Clínica PetCare · Poblado",
+    val lugar: String = "PetCare Clínica Veterinaria",
     val precioConsulta: String = "$65.000",
     val tarifaServicio: String = "$3.500",
     val total: String = "$68.500"
@@ -76,28 +81,13 @@ class PetShieldViewModel(
     val mascotas = mutableStateListOf<Mascota>()
 
     // Clínicas
-    val clinicas = mutableStateListOf(
-        Clinica("1", "PetCare Clínica Veterinaria", "Av. Insurgentes 778 Ciudad De México", "7:15 AM - 6:30 PM", 4.9f, true, true),
-        Clinica("2", "VitalPet Clínica Veterinaria", "Av. Insurgentes 778 Ciudad De México", "7:15 AM - 6:30 PM", 4.8f, true, false),
-        Clinica("3", "VetSalud Clínica Veterinaria", "778 Locust View Drive Oakland, CA", "7:15 AM - 6:30 PM", 4.9f, true, false),
-        Clinica("4", "HappyPaws Veterinaria", "778 Locust View Drive Oakland, CA", "7:15 AM - 6:30 PM", 4.7f, true, false)
-    )
+    val clinicas = mutableStateListOf<Clinica>()
 
     // Veterinarios Favoritos
-    val veterinarios = mutableStateListOf(
-        Veterinario("1", "Dra. Ana Jiménez, MV", "Medicina Reproductiva", "Veterinaria A", true, "👩‍⚕️"),
-        Veterinario("2", "Dr. Mateo Navarro, MV", "Cardiólogo Veterinario", "Veterinaria B", true, "👨‍⚕️"),
-        Veterinario("3", "Dra. Laura Gómez, MV", "Veterinario General", "Veterinaria C", true, "👩‍⚕️"),
-        Veterinario("4", "Dr. Martín Espinoza, MV", "Veterinario General", "Veterinaria D", true, "👨‍⚕️")
-    )
+    val veterinarios = mutableStateListOf<Veterinario>()
 
     // Citas
-    val citas = mutableStateListOf(
-        Cita("1", "Veterinaria A", "Veterinario General", "Domingo, 12 Junio", "9:30 AM - 10:00 AM", true),
-        Cita("2", "Veterinaria B", "Desparasitación", "Viernes, 20 Junio", "2:30 PM - 3:00 PM", true),
-        Cita("3", "Veterinaria C", "Chequeo General", "Martes, 15 Junio", "9:30 AM - 10:00 AM", true),
-        Cita("4", "Veterinaria D", "Vacunación", "Viernes, 20 Junio", "2:30 PM - 3:00 PM", true)
-    )
+    val citas = mutableStateListOf<Cita>()
 
     // Datos de la reserva actual
     var reservaActual by mutableStateOf(DatosReserva())
@@ -113,6 +103,9 @@ class PetShieldViewModel(
             cargarDatosUsuario(currentUser.uid)
         }
         cargarMascotasDesdeFirebase()
+        cargarClinicasDesdeFirebase()
+        cargarVeterinariosDesdeFirebase()
+        cargarCitasDesdeFirebase()
     }
 
     fun cargarDatosUsuario(uid: String) {
@@ -142,6 +135,7 @@ class PetShieldViewModel(
                     usuarioEmail = currentUser.email ?: ""
                     cargarDatosUsuario(currentUser.uid)
                     cargarMascotasDesdeFirebase()
+                    cargarCitasDesdeFirebase()
                 }
                 onResult(true, null)
             } else {
@@ -163,6 +157,7 @@ class PetShieldViewModel(
                     usuarioEmail = currentUser.email ?: usuarioEmail
                     cargarDatosUsuario(currentUser.uid)
                     cargarMascotasDesdeFirebase()
+                    cargarCitasDesdeFirebase()
                 }
                 onResult(true, null)
             } else {
@@ -194,6 +189,7 @@ class PetShieldViewModel(
                     usuarioNombre = nombre
                     usuarioEmail = email
                     usuarioTelefono = telefono
+                    cargarCitasDesdeFirebase()
                 }
                 onResult(true, null)
             } else {
@@ -209,6 +205,7 @@ class PetShieldViewModel(
         usuarioEmail = ""
         usuarioTelefono = ""
         mascotas.clear()
+        citas.clear()
     }
 
     fun cargarMascotasDesdeFirebase() {
@@ -225,6 +222,75 @@ class PetShieldViewModel(
                             peso = item.peso,
                             fechaNacimiento = item.fechaNacimiento,
                             sexo = item.sexo
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun cargarClinicasDesdeFirebase() {
+        repository.obtenerClinicas { listaFirebase ->
+            if (listaFirebase.isNotEmpty()) {
+                clinicas.clear()
+                listaFirebase.forEach { item ->
+                    clinicas.add(
+                        Clinica(
+                            id = item.id,
+                            nombre = item.nombre,
+                            direccion = item.direccion,
+                            horario = item.horario,
+                            calificacion = item.calificacion.toFloat(),
+                            esRecomendada = true,
+                            esFavorita = item.esFavorito
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun cargarVeterinariosDesdeFirebase() {
+        repository.obtenerVeterinarios { listaFirebase ->
+            if (listaFirebase.isNotEmpty()) {
+                veterinarios.clear()
+                listaFirebase.forEach { item ->
+                    veterinarios.add(
+                        Veterinario(
+                            id = item.id,
+                            clinicaId = item.clinicaId,
+                            nombre = item.nombre,
+                            especialidad = item.especialidad,
+                            clinicaTag = item.clinicaTag,
+                            esFavorito = item.esFavorito
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun cargarCitasDesdeFirebase() {
+        if (usuarioId.isBlank() || usuarioId == "anonimo" || usuarioId == "usuario_demo") {
+            citas.clear()
+            return
+        }
+        repository.obtenerCitasPorUsuario(usuarioId) { listaFirebase ->
+            citas.clear()
+            if (listaFirebase.isNotEmpty()) {
+                listaFirebase.forEach { item ->
+                    val clinicaEncontrada = clinicas.firstOrNull { it.id == item.clinicaId }
+                    val nombreClinicaMostrado = clinicaEncontrada?.nombre ?: item.nombreClinica.ifBlank { "Clínica Veterinaria" }
+                    citas.add(
+                        Cita(
+                            id = item.id,
+                            vetNombre = nombreClinicaMostrado,
+                            servicio = item.nombreServicio.ifBlank { "Consulta General" },
+                            fechaStr = item.fecha,
+                            horaStr = item.hora,
+                            esProxima = item.estado == "Confirmada" || item.estado == "Pendiente",
+                            mascotaNombre = item.nombreMascota,
+                            lugar = nombreClinicaMostrado
                         )
                     )
                 }
@@ -267,38 +333,49 @@ class PetShieldViewModel(
     }
 
     fun confirmarReservaActual() {
+        val clinicaSeleccionada = clinicas.firstOrNull { it.id == reservaActual.clinicaId } ?: clinicas.firstOrNull()
+        val mascotaSeleccionada = mascotas.firstOrNull { it.id == reservaActual.mascotaId } ?: mascotas.firstOrNull()
+
+        val idClinicaReal = clinicaSeleccionada?.id ?: reservaActual.clinicaId
+        val nombreClinicaReal = clinicaSeleccionada?.nombre ?: reservaActual.lugar
+        val idMascotaReal = mascotaSeleccionada?.id ?: reservaActual.mascotaId
+        val nombreMascotaReal = mascotaSeleccionada?.nombre ?: reservaActual.mascotaNombre
+
         val nuevaCita = Cita(
             id = (citas.size + 1).toString(),
-            vetNombre = reservaActual.profesionalNombre,
+            vetNombre = reservaActual.profesionalNombre.ifBlank { nombreClinicaReal },
             servicio = reservaActual.servicioNombre,
             fechaStr = reservaActual.fechaStr,
             horaStr = reservaActual.horaStr,
             esProxima = true,
-            mascotaNombre = reservaActual.mascotaNombre,
+            mascotaNombre = nombreMascotaReal,
             modalidad = reservaActual.modalidad,
-            lugar = reservaActual.lugar
+            lugar = nombreClinicaReal
         )
         citas.add(0, nuevaCita)
 
-        // Guardar la cita en Firebase Firestore
+        // Guardar la cita en Firebase Firestore con IDs reales de clinicas y mascotas
         val modeloCita = CitaModel(
             usuarioId = usuarioId,
-            nombreMascota = reservaActual.mascotaNombre,
-            nombreClinica = reservaActual.lugar,
+            mascotaId = idMascotaReal,
+            nombreMascota = nombreMascotaReal,
+            clinicaId = idClinicaReal,
+            nombreClinica = nombreClinicaReal,
+            servicioId = reservaActual.servicioId,
             nombreServicio = reservaActual.servicioNombre,
             fecha = reservaActual.fechaStr,
             hora = reservaActual.horaStr,
             estado = "Confirmada"
         )
         repository.crearCita(modeloCita) { exito, error ->
-            // Cita registrada en Firestore
+            cargarCitasDesdeFirebase()
         }
     }
 
     fun cancelarCita(id: String) {
         citas.removeAll { it.id == id }
         repository.cancelarCita(id, "Cancelada por el usuario") { exito ->
-            // Cita actualizada en Firestore
+            cargarCitasDesdeFirebase()
         }
     }
 }

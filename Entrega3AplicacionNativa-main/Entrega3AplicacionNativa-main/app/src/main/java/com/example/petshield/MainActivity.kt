@@ -102,7 +102,13 @@ fun PetShieldApp() {
             ClinicasScreen(
                 viewModel = viewModel,
                 onBack = { pantallaActual = "home" },
-                onSelectClinica = { pantallaActual = "detalle_servicio" },
+                onSelectClinica = { clinica ->
+                    viewModel.reservaActual = viewModel.reservaActual.copy(
+                        clinicaId = clinica.id,
+                        lugar = clinica.nombre
+                    )
+                    pantallaActual = "detalle_servicio"
+                },
                 onNavigateToTab = { navigateToTab(it) }
             )
         }

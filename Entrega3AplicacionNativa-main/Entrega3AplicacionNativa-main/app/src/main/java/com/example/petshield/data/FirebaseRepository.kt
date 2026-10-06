@@ -180,6 +180,32 @@ class FirebaseRepository(
             .addOnFailureListener { onResult(emptyList()) }
     }
 
+    fun guardarClinica(clinica: ClinicaModel, onResult: (Boolean) -> Unit) {
+        val docRef = if (clinica.id.isBlank()) db.collection("clinicas").document() else db.collection("clinicas").document(clinica.id)
+        val modelo = clinica.copy(id = docRef.id)
+        docRef.set(modelo, SetOptions.merge())
+            .addOnSuccessListener { onResult(true) }
+            .addOnFailureListener { onResult(false) }
+    }
+
+    fun obtenerVeterinarios(onResult: (List<VeterinarioModel>) -> Unit) {
+        db.collection("veterinarios")
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val lista = snapshot.toObjects(VeterinarioModel::class.java)
+                onResult(lista)
+            }
+            .addOnFailureListener { onResult(emptyList()) }
+    }
+
+    fun guardarVeterinario(vet: VeterinarioModel, onResult: (Boolean) -> Unit) {
+        val docRef = if (vet.id.isBlank()) db.collection("veterinarios").document() else db.collection("veterinarios").document(vet.id)
+        val modelo = vet.copy(id = docRef.id)
+        docRef.set(modelo, SetOptions.merge())
+            .addOnSuccessListener { onResult(true) }
+            .addOnFailureListener { onResult(false) }
+    }
+
     fun obtenerServiciosPorClinica(clinicaId: String, onResult: (List<ServicioModel>) -> Unit) {
         db.collection("servicios")
             .whereEqualTo("clinicaId", clinicaId)

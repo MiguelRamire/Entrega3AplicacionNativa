@@ -70,6 +70,18 @@ data class ServicioModel(
 )
 
 /**
+ * Modelo para la colección "veterinarios" en Firestore.
+ */
+data class VeterinarioModel(
+    @DocumentId val id: String = "",
+    val clinicaId: String = "",
+    val nombre: String = "",
+    val especialidad: String = "",
+    val clinicaTag: String = "",
+    val esFavorito: Boolean = false
+)
+
+/**
  * Modelo para la colección "citas" en Firestore.
  */
 data class CitaModel(

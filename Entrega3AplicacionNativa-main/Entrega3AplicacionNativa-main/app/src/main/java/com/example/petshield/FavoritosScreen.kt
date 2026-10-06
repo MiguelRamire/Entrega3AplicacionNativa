@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -124,7 +125,12 @@ fun VetCard(
                 .background(fondoClaro),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = vet.emojiAvatar, fontSize = 36.sp)
+            Icon(
+                imageVector = Icons.Default.Person,
+                contentDescription = "Veterinario",
+                tint = colorCelesteFin,
+                modifier = Modifier.size(36.dp)
+            )
         }
 
         Spacer(modifier = Modifier.width(12.dp))
