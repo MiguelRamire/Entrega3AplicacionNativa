@@ -36,11 +36,11 @@ fun AgregarMascotaScreen(
     onNavigateToTab: (BottomTab) -> Unit
 ) {
     var nombre by remember { mutableStateOf("") }
-    var especie by remember { mutableStateOf("Perro") }
-    var raza by remember { mutableStateOf("Golden Retriever") }
-    var peso by remember { mutableStateOf("12 kg") }
-    var fechaNacimiento by remember { mutableStateOf("12/03/2023") }
-    var sexo by remember { mutableStateOf("Macho") }
+    var especie by remember { mutableStateOf("") }
+    var raza by remember { mutableStateOf("") }
+    var peso by remember { mutableStateOf("") }
+    var fechaNacimiento by remember { mutableStateOf("") }
+    var sexo by remember { mutableStateOf("") }
 
     var estaGuardada by remember { mutableStateOf(false) }
 
@@ -63,6 +63,7 @@ fun AgregarMascotaScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .imePadding()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -115,6 +116,7 @@ fun AgregarMascotaScreen(
             OutlinedTextField(
                 value = especie,
                 onValueChange = { especie = it },
+                placeholder = { Text("Ej. Perro", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 trailingIcon = { Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = Color.Black) },
                 shape = RoundedCornerShape(12.dp),
@@ -127,6 +129,7 @@ fun AgregarMascotaScreen(
             OutlinedTextField(
                 value = raza,
                 onValueChange = { raza = it },
+                placeholder = { Text("Ej. Golden Retriever", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = customTextFieldColors(FondoClaro, CelesteFin)
@@ -138,6 +141,7 @@ fun AgregarMascotaScreen(
             OutlinedTextField(
                 value = peso,
                 onValueChange = { peso = it },
+                placeholder = { Text("Ej. 12 kg", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = customTextFieldColors(FondoClaro, CelesteFin)
@@ -149,6 +153,7 @@ fun AgregarMascotaScreen(
             OutlinedTextField(
                 value = fechaNacimiento,
                 onValueChange = { fechaNacimiento = it },
+                placeholder = { Text("DD/MM/AAAA", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 trailingIcon = { Icon(Icons.Default.DateRange, contentDescription = null, tint = Color.DarkGray) },
                 shape = RoundedCornerShape(12.dp),
@@ -161,6 +166,7 @@ fun AgregarMascotaScreen(
             OutlinedTextField(
                 value = sexo,
                 onValueChange = { sexo = it },
+                placeholder = { Text("Ej. Macho", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 trailingIcon = { Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = Color.Black) },
                 shape = RoundedCornerShape(12.dp),
