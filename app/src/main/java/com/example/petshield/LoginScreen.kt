@@ -1,10 +1,7 @@
 package com.example.petshield
 
-<<<<<<< HEAD
-=======
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
->>>>>>> origin/main
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,28 +10,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-<<<<<<< HEAD
-=======
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
->>>>>>> origin/main
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-<<<<<<< HEAD
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LoginScreen(
-=======
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -43,7 +24,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.petshield.ui.theme.CelesteFin
 import com.example.petshield.ui.theme.CelesteInicio
 import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.ErrorRedBg
@@ -60,20 +40,11 @@ import com.google.android.gms.common.api.ApiException
 @Composable
 fun LoginScreen(
     viewModel: PetShieldViewModel,
->>>>>>> origin/main
     onBack: () -> Unit,
     onNavigateToRegister: () -> Unit,
     onNavigateToRecover: () -> Unit,
     onLoginSuccess: () -> Unit
 ) {
-<<<<<<< HEAD
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
-    val colorDegradadoInicio = Color(0xFF33E4DB)
-    val colorDegradadoFin = Color(0xFF00BBD3)
-    val colorFondoInput = Color(0xFFE9F6FE)
-=======
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -105,7 +76,6 @@ fun LoginScreen(
             errorMessage = "Error en Google Sign-In: ${e.localizedMessage}"
         }
     }
->>>>>>> origin/main
 
     Column(
         modifier = Modifier
@@ -118,11 +88,7 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(90.dp)
-<<<<<<< HEAD
-                .background(Brush.horizontalGradient(listOf(colorDegradadoInicio, colorDegradadoFin)))
-=======
                 .background(PetShieldGradient)
->>>>>>> origin/main
                 .padding(top = 30.dp, start = 16.dp, end = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -133,11 +99,7 @@ fun LoginScreen(
             Text(text = "Iniciar Sesión", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
 
             Image(
-<<<<<<< HEAD
-                painter = painterResource(id = R.drawable.ic_logo_blanco), // Corregido el nombre del recurso
-=======
                 painter = painterResource(id = R.drawable.ic_logo_blanco),
->>>>>>> origin/main
                 contentDescription = "Logo",
                 modifier = Modifier.size(30.dp)
             )
@@ -155,24 +117,11 @@ fun LoginScreen(
                 text = "¡Bienvenido De Nuevo!",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-<<<<<<< HEAD
-                color = colorDegradadoInicio
-=======
                 color = CelesteTexto
->>>>>>> origin/main
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-<<<<<<< HEAD
-            // Campo Correo
-            Text(text = "Correo o Teléfono", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray)
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                placeholder = { Text("example@example.com", color = colorDegradadoInicio) },
-=======
             errorMessage?.let { msg ->
                 Card(
                     colors = CardDefaults.cardColors(containerColor = ErrorRedBg),
@@ -196,40 +145,22 @@ fun LoginScreen(
                 value = email,
                 onValueChange = { email = it; errorMessage = null },
                 placeholder = { Text("example@example.com", color = TextoPlaceholder) },
->>>>>>> origin/main
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-<<<<<<< HEAD
-                    focusedContainerColor = colorFondoInput,
-                    unfocusedContainerColor = colorFondoInput,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = colorDegradadoInicio
-=======
                     focusedContainerColor = FondoClaro,
                     unfocusedContainerColor = FondoClaro,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     cursorColor = CelesteInicio
->>>>>>> origin/main
                 )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Campo Contraseña
-<<<<<<< HEAD
-            Text(text = "Contraseña", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray)
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                placeholder = { Text("*************", color = colorDegradadoInicio) },
-                visualTransformation = PasswordVisualTransformation(),
-=======
             Text(text = "Contraseña", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextoMedio)
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
@@ -246,38 +177,24 @@ fun LoginScreen(
                         )
                     }
                 },
->>>>>>> origin/main
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = Color.Black,
                     unfocusedTextColor = Color.Black,
-<<<<<<< HEAD
-                    focusedContainerColor = colorFondoInput,
-                    unfocusedContainerColor = colorFondoInput,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = colorDegradadoInicio
-=======
                     focusedContainerColor = FondoClaro,
                     unfocusedContainerColor = FondoClaro,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     cursorColor = CelesteInicio
->>>>>>> origin/main
                 )
             )
 
             // ¿Olvidaste tu contraseña?
             Text(
                 text = "¿Olvidaste tu contraseña?",
-<<<<<<< HEAD
-                color = colorDegradadoFin,
-                fontSize = 12.sp,
-=======
                 color = CelesteTexto,
                 fontSize = 14.sp,
->>>>>>> origin/main
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .align(Alignment.End)
@@ -287,11 +204,6 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.weight(1f))
 
-<<<<<<< HEAD
-            // --- CONTENIDO INFERIOR ---
-            Button(
-                onClick = { onLoginSuccess() }, // <--- 2. Lo ejecutas al hacer clic
-=======
             // --- BOTÓN INICIAR SESIÓN ---
             Button(
                 onClick = {
@@ -312,30 +224,21 @@ fun LoginScreen(
                     }
                 },
                 enabled = !cargando,
->>>>>>> origin/main
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
                     .background(
-<<<<<<< HEAD
-                        brush = Brush.horizontalGradient(listOf(colorDegradadoInicio, colorDegradadoFin)),
-=======
                         brush = PetShieldGradient,
->>>>>>> origin/main
                         shape = RoundedCornerShape(25.dp)
                     ),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 contentPadding = PaddingValues()
             ) {
-<<<<<<< HEAD
-                Text("Iniciar Sesión", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-=======
                 if (cargando) {
                     CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
                 } else {
                     Text("Iniciar Sesión", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 }
->>>>>>> origin/main
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -344,30 +247,6 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-<<<<<<< HEAD
-                Text("o inicia sesion con:", fontSize = 12.sp, color = Color.Gray)
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(colorDegradadoInicio, CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("G", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Row {
-                    Text("¿No tienes cuenta? ", fontSize = 12.sp, color = Color.Gray)
-                    Text(
-                        text = "Crea una",
-                        fontSize = 12.sp,
-                        color = colorDegradadoFin,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.clickable { onNavigateToRegister() } // Ahora avisa correctamente al MainActivity
-=======
                 Text("o inicia sesión con:", fontSize = 14.sp, color = TextoSecundario)
                 Spacer(modifier = Modifier.height(12.dp))
 
@@ -410,7 +289,6 @@ fun LoginScreen(
                         color = CelesteTexto,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.clickable { onNavigateToRegister() }
->>>>>>> origin/main
                     )
                 }
 
@@ -418,8 +296,4 @@ fun LoginScreen(
             }
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/main
