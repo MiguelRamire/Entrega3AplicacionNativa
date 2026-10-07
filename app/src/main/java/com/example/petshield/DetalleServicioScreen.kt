@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
 import com.example.petshield.ui.theme.TextoMedio
 import com.example.petshield.ui.theme.TextoSecundario
+import java.util.Calendar
 
 @Composable
 fun DetalleServicioScreen(
@@ -38,6 +40,46 @@ fun DetalleServicioScreen(
 ) {
     var fechaSeleccionada by remember { mutableStateOf("Miércoles, 23 De Septiembre") }
     var horaSeleccionada by remember { mutableStateOf("3:00 PM") }
+
+    var expandedFecha by remember { mutableStateOf(false) }
+    var expandedHora by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+    val datePickerDialog = android.app.DatePickerDialog(
+        context,
+        { _, year, month, dayOfMonth ->
+            val meses = arrayOf("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre")
+            val diasSemana = arrayOf("Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado")
+            val cal = Calendar.getInstance().apply { set(year, month, dayOfMonth) }
+            val dayName = diasSemana[cal.get(Calendar.DAY_OF_WEEK) - 1]
+            val monthName = meses[month]
+            fechaSeleccionada = "$dayName, $dayOfMonth De $monthName"
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+
+    val opcionesFechas = listOf(
+        "Miércoles, 23 De Septiembre",
+        "Jueves, 24 De Septiembre",
+        "Viernes, 25 De Septiembre",
+        "Sábado, 26 De Septiembre",
+        "Lunes, 28 De Septiembre",
+        "Seleccionar en calendario..."
+    )
+
+    val opcionesHoras = listOf(
+        "8:00 AM",
+        "9:00 AM",
+        "10:00 AM",
+        "11:00 AM",
+        "2:00 PM",
+        "3:00 PM",
+        "4:00 PM",
+        "5:00 PM"
+    )
 
     Scaffold(
         topBar = {
@@ -190,75 +232,125 @@ fun DetalleServicioScreen(
                     )
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = Color.White,
-                        shape = RoundedCornerShape(20.dp)
-                    ) {
-                        Row(
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
+                                .clickable { expandedFecha = true },
+                            color = Color.White,
+                            shape = RoundedCornerShape(20.dp)
                         ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Default.DateRange,
+                                        contentDescription = null,
+                                        tint = CelesteFin,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = fechaSeleccionada,
+                                        color = CelesteTexto,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
                                 Icon(
-                                    imageVector = Icons.Default.DateRange,
+                                    imageVector = Icons.Default.KeyboardArrowDown,
                                     contentDescription = null,
-                                    tint = CelesteFin,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = fechaSeleccionada,
-                                    color = CelesteTexto,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.SemiBold
+                                    tint = CelesteFin
                                 )
                             }
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowDown,
-                                contentDescription = null,
-                                tint = CelesteFin
-                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = expandedFecha,
+                            onDismissRequest = { expandedFecha = false },
+                            modifier = Modifier.background(Color.White)
+                        ) {
+                            opcionesFechas.forEach { opcion ->
+                                DropdownMenuItem(
+                                    text = {
+                                        Text(
+                                            text = opcion,
+                                            color = if (opcion.startsWith("Seleccionar")) CelesteFin else Color.Black,
+                                            fontWeight = if (opcion.startsWith("Seleccionar")) FontWeight.Bold else FontWeight.Normal
+                                        )
+                                    },
+                                    onClick = {
+                                        expandedFecha = false
+                                        if (opcion.startsWith("Seleccionar")) {
+                                            datePickerDialog.show()
+                                        } else {
+                                            fechaSeleccionada = opcion
+                                        }
+                                    }
+                                )
+                            }
                         }
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = Color.White,
-                        shape = RoundedCornerShape(20.dp)
-                    ) {
-                        Row(
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        Surface(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 12.dp, vertical = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
+                                .clickable { expandedHora = true },
+                            color = Color.White,
+                            shape = RoundedCornerShape(20.dp)
                         ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 12.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Schedule,
+                                        contentDescription = null,
+                                        tint = CelesteFin,
+                                        modifier = Modifier.size(20.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Text(
+                                        text = horaSeleccionada,
+                                        color = CelesteTexto,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
                                 Icon(
-                                    imageVector = Icons.Outlined.Schedule,
+                                    imageVector = Icons.Default.KeyboardArrowDown,
                                     contentDescription = null,
-                                    tint = CelesteFin,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = horaSeleccionada,
-                                    color = CelesteTexto,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.SemiBold
+                                    tint = CelesteFin
                                 )
                             }
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowDown,
-                                contentDescription = null,
-                                tint = CelesteFin
-                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = expandedHora,
+                            onDismissRequest = { expandedHora = false },
+                            modifier = Modifier.background(Color.White)
+                        ) {
+                            opcionesHoras.forEach { opcion ->
+                                DropdownMenuItem(
+                                    text = { Text(opcion, color = Color.Black) },
+                                    onClick = {
+                                        horaSeleccionada = opcion
+                                        expandedHora = false
+                                    }
+                                )
+                            }
                         }
                     }
                 }

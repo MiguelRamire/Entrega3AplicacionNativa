@@ -31,7 +31,9 @@ fun PetShieldBottomBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
+            .navigationBarsPadding()
             .padding(horizontal = 16.dp)
+            .padding(bottom = 8.dp)
             .height(60.dp),
         color = FondoClaro,
         shape = RoundedCornerShape(28.dp)

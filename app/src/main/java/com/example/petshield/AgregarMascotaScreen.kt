@@ -2,6 +2,7 @@ package com.example.petshield
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,7 @@ import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
 import com.example.petshield.ui.theme.TextoMedio
 import com.example.petshield.ui.theme.TextoPlaceholder
+import java.util.Calendar
 
 @Composable
 fun AgregarMascotaScreen(
@@ -41,6 +44,26 @@ fun AgregarMascotaScreen(
     var peso by remember { mutableStateOf("") }
     var fechaNacimiento by remember { mutableStateOf("") }
     var sexo by remember { mutableStateOf("") }
+
+    var expandedEspecie by remember { mutableStateOf(false) }
+    val especiesOpciones = listOf("Perro", "Gato", "Ave", "Roedor", "Reptil", "Otro")
+
+    var expandedSexo by remember { mutableStateOf(false) }
+    val sexoOpciones = listOf("Macho", "Hembra")
+
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+    val datePickerDialog = android.app.DatePickerDialog(
+        context,
+        { _, selectedYear, selectedMonth, selectedDayOfMonth ->
+            val dayStr = if (selectedDayOfMonth < 10) "0$selectedDayOfMonth" else "$selectedDayOfMonth"
+            val monthStr = if (selectedMonth + 1 < 10) "0${selectedMonth + 1}" else "${selectedMonth + 1}"
+            fechaNacimiento = "$dayStr/$monthStr/$selectedYear"
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
 
     var estaGuardada by remember { mutableStateOf(false) }
 
@@ -113,15 +136,38 @@ fun AgregarMascotaScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             FormFieldLabel(label = "Especie")
-            OutlinedTextField(
-                value = especie,
-                onValueChange = { especie = it },
-                placeholder = { Text("Ej. Perro", color = TextoPlaceholder) },
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = { Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = Color.Black) },
-                shape = RoundedCornerShape(12.dp),
-                colors = customTextFieldColors(FondoClaro, CelesteFin)
-            )
+            Box(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = especie,
+                    onValueChange = { especie = it },
+                    placeholder = { Text("Selecciona o escribe...", color = TextoPlaceholder) },
+                    modifier = Modifier.fillMaxWidth(),
+                    trailingIcon = {
+                        IconButton(onClick = { expandedEspecie = !expandedEspecie }) {
+                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Seleccionar especie", tint = Color.Black)
+                        }
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = customTextFieldColors(FondoClaro, CelesteFin)
+                )
+                DropdownMenu(
+                    expanded = expandedEspecie,
+                    onDismissRequest = { expandedEspecie = false },
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .background(Color.White)
+                ) {
+                    especiesOpciones.forEach { opcion ->
+                        DropdownMenuItem(
+                            text = { Text(opcion, color = Color.Black) },
+                            onClick = {
+                                especie = opcion
+                                expandedEspecie = false
+                            }
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -150,28 +196,57 @@ fun AgregarMascotaScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             FormFieldLabel(label = "Fecha de nacimiento")
-            OutlinedTextField(
-                value = fechaNacimiento,
-                onValueChange = { fechaNacimiento = it },
-                placeholder = { Text("DD/MM/AAAA", color = TextoPlaceholder) },
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = { Icon(Icons.Default.DateRange, contentDescription = null, tint = Color.DarkGray) },
-                shape = RoundedCornerShape(12.dp),
-                colors = customTextFieldColors(FondoClaro, CelesteFin)
-            )
+            Box(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = fechaNacimiento,
+                    onValueChange = { fechaNacimiento = it },
+                    placeholder = { Text("DD/MM/AAAA", color = TextoPlaceholder) },
+                    modifier = Modifier.fillMaxWidth(),
+                    trailingIcon = {
+                        IconButton(onClick = { datePickerDialog.show() }) {
+                            Icon(Icons.Default.DateRange, contentDescription = "Seleccionar fecha", tint = Color.DarkGray)
+                        }
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = customTextFieldColors(FondoClaro, CelesteFin)
+                )
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
 
             FormFieldLabel(label = "Sexo")
-            OutlinedTextField(
-                value = sexo,
-                onValueChange = { sexo = it },
-                placeholder = { Text("Ej. Macho", color = TextoPlaceholder) },
-                modifier = Modifier.fillMaxWidth(),
-                trailingIcon = { Icon(Icons.Default.KeyboardArrowDown, contentDescription = null, tint = Color.Black) },
-                shape = RoundedCornerShape(12.dp),
-                colors = customTextFieldColors(FondoClaro, CelesteFin)
-            )
+            Box(modifier = Modifier.fillMaxWidth()) {
+                OutlinedTextField(
+                    value = sexo,
+                    onValueChange = { sexo = it },
+                    placeholder = { Text("Selecciona o escribe...", color = TextoPlaceholder) },
+                    modifier = Modifier.fillMaxWidth(),
+                    trailingIcon = {
+                        IconButton(onClick = { expandedSexo = !expandedSexo }) {
+                            Icon(Icons.Default.KeyboardArrowDown, contentDescription = "Seleccionar sexo", tint = Color.Black)
+                        }
+                    },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = customTextFieldColors(FondoClaro, CelesteFin)
+                )
+                DropdownMenu(
+                    expanded = expandedSexo,
+                    onDismissRequest = { expandedSexo = false },
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .background(Color.White)
+                ) {
+                    sexoOpciones.forEach { opcion ->
+                        DropdownMenuItem(
+                            text = { Text(opcion, color = Color.Black) },
+                            onClick = {
+                                sexo = opcion
+                                expandedSexo = false
+                            }
+                        )
+                    }
+                }
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
