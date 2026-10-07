@@ -13,3 +13,9 @@ val ErrorRedText = Color(0xFFD32F2F)
 val PetShieldGradient = Brush.horizontalGradient(
     listOf(CelesteInicio, CelesteFin)
 )
+
+val CelesteTexto = Color(0xFF00707F)
+val TextoSecundario = Color(0xFF595959)
+val TextoMedio = Color(0xFF333333)
+val TextoPlaceholder = Color(0xFF4F6F75)
+
