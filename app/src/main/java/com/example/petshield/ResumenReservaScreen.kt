@@ -1,0 +1,191 @@
+package com.example.petshield
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+
+@Composable
+fun ResumenReservaScreen(
+    viewModel: PetShieldViewModel,
+    onBack: () -> Unit,
+    onConfirmarReserva: () -> Unit,
+    onNavigateToTab: (BottomTab) -> Unit
+) {
+    val colorCelesteInicio = Color(0xFF33E4DB)
+    val colorCelesteFin = Color(0xFF00BBD3)
+    val fondoClaro = Color(0xFFE9F6FE)
+    val reserva = viewModel.reservaActual
+
+    Scaffold(
+        topBar = {
+            PetShieldTopBar(
+                title = "Resumen de reserva",
+                onBack = onBack,
+                onNavigateToHome = { onNavigateToTab(BottomTab.HOME) }
+            )
+        },
+        bottomBar = {
+            PetShieldBottomBar(
+                currentTab = BottomTab.HOME,
+                onNavigateToTab = onNavigateToTab
+            )
+        },
+        containerColor = Color.White
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Header card
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = fondoClaro,
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "TODO LISTO PARA MAX",
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colorCelesteFin
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "Revisa los datos de tu reserva",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Main details card
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = Color.White,
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, fondoClaro)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    ReservaDetailRow(label = "Mascota", value = reserva.mascotaNombre)
+                    ReservaDetailRow(label = "Servicio", value = reserva.servicioNombre)
+                    ReservaDetailRow(label = "Profesional", value = reserva.profesionalNombre)
+                    ReservaDetailRow(label = "Fecha", value = reserva.fechaStr)
+                    ReservaDetailRow(label = "Hora", value = reserva.horaStr)
+                    ReservaDetailRow(label = "Modalidad", value = reserva.modalidad)
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = fondoClaro)
+                    ReservaDetailRow(label = "Lugar", value = reserva.lugar)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Desglose de precio
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = fondoClaro,
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Desglose de precio",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = colorCelesteFin
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "Consulta", fontSize = 13.sp, color = Color.Gray)
+                        Text(text = reserva.precioConsulta, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "Tarifa de servicio", fontSize = 13.sp, color = Color.Gray)
+                        Text(text = reserva.tarifaServicio, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
+                    }
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = Color.White)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "Total", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text(text = reserva.total, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = colorCelesteFin)
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = "Cancelación gratuita hasta 4 horas antes.",
+                fontSize = 11.sp,
+                color = Color.Gray,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Botón Confirmar
+            Button(
+                onClick = {
+                    viewModel.confirmarReservaActual()
+                    onConfirmarReserva()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .background(
+                        brush = Brush.horizontalGradient(listOf(colorCelesteInicio, colorCelesteFin)),
+                        shape = RoundedCornerShape(25.dp)
+                    ),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+                contentPadding = PaddingValues()
+            ) {
+                Text(
+                    text = "Confirmar reserva",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ReservaDetailRow(label: String, value: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(text = label, fontSize = 13.sp, color = Color.Gray)
+        Text(text = value, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+    }
+}
