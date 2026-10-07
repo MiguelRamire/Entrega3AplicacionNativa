@@ -8,12 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+<<<<<<< HEAD
 import androidx.compose.ui.graphics.Brush
+=======
+>>>>>>> origin/main
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+<<<<<<< HEAD
 import kotlinx.coroutines.delay
 // Si te marca error en la R, importa tu paquete: import com.example.petshield.R
 
@@ -24,12 +28,22 @@ fun SplashScreen(onNavigateToWelcome: () -> Unit) {
 
     LaunchedEffect(key1 = true) {
         delay(2500L)
+=======
+import com.example.petshield.ui.theme.PetShieldGradient
+import kotlinx.coroutines.delay
+
+@Composable
+fun SplashScreen(onNavigateToWelcome: () -> Unit) {
+    LaunchedEffect(key1 = true) {
+        delay(2000L)
+>>>>>>> origin/main
         onNavigateToWelcome()
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
+<<<<<<< HEAD
             .background(Brush.verticalGradient(listOf(colorInicio, colorFin))),
         contentAlignment = Alignment.Center
     ) {
@@ -38,16 +52,29 @@ fun SplashScreen(onNavigateToWelcome: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // 1. El ícono (Asegúrate de que la imagen en drawable se llame ic_logo_blanco)
+=======
+            .background(PetShieldGradient),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+>>>>>>> origin/main
             Image(
                 painter = painterResource(id = R.drawable.ic_logo_blanco),
                 contentDescription = "Icono PetShield",
                 modifier = Modifier.size(120.dp)
             )
 
+<<<<<<< HEAD
             // Espacio entre el ícono y las letras
             Spacer(modifier = Modifier.height(16.dp))
 
             // 2. El texto nativo
+=======
+            Spacer(modifier = Modifier.height(16.dp))
+
+>>>>>>> origin/main
             Text(
                 text = "PetShield",
                 color = Color.White,
@@ -56,4 +83,8 @@ fun SplashScreen(onNavigateToWelcome: () -> Unit) {
             )
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main
