@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
 
@@ -42,6 +43,14 @@ fun PerfilScreen(
     onLogout: () -> Unit,
     onNavigateToTab: (BottomTab) -> Unit
 ) {
+    val iniciales = viewModel.usuarioNombre
+        .split(" ")
+        .filter { it.isNotBlank() }
+        .take(2)
+        .mapNotNull { it.firstOrNull()?.uppercaseChar() }
+        .joinToString("")
+        .ifEmpty { "U" }
+
     Scaffold(
         bottomBar = {
             PetShieldBottomBar(
@@ -105,10 +114,15 @@ fun PerfilScreen(
                             modifier = Modifier
                                 .size(86.dp)
                                 .clip(CircleShape)
-                                .background(FondoClaro),
+                                .background(CelesteTexto),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = "👩", fontSize = 42.sp)
+                            Text(
+                                text = iniciales,
+                                color = Color.White,
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
 
                         Box(

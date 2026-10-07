@@ -120,48 +120,28 @@ fun HomeScreen(
                     color = CelesteTexto
                 )
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onNavigateToPerfil() }
+                val iniciales = viewModel.usuarioNombre
+                    .split(" ")
+                    .filter { it.isNotBlank() }
+                    .take(2)
+                    .mapNotNull { it.firstOrNull()?.uppercaseChar() }
+                    .joinToString("")
+                    .ifEmpty { "U" }
+
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(CelesteTexto)
+                        .clickable { onNavigateToPerfil() },
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = viewModel.usuarioNombre,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TextoOscuro
+                        text = iniciales,
+                        color = Color.White,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    Box(
-                        modifier = Modifier.size(44.dp),
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(CircleShape)
-                                .background(FondoClaro),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(text = "👩", fontSize = 18.sp)
-                        }
-
-                        Box(
-                            modifier = Modifier
-                                .size(16.dp)
-                                .clip(CircleShape)
-                                .background(Color.White)
-                                .border(0.5.dp, CelesteFin, CircleShape),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_editar),
-                                contentDescription = "Editar perfil",
-                                tint = CelesteFin,
-                                modifier = Modifier.size(10.dp)
-                            )
-                        }
-                    }
                 }
             }
 
