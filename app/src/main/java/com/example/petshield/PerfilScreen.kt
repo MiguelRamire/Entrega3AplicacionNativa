@@ -142,12 +142,12 @@ fun PerfilScreen(
                         Text(
                             text = viewModel.usuarioTelefono,
                             color = Color.White.copy(alpha = 0.9f),
-                            fontSize = 13.sp
+                            fontSize = 14.sp
                         )
                         Text(
                             text = viewModel.usuarioEmail,
                             color = Color.White.copy(alpha = 0.9f),
-                            fontSize = 13.sp
+                            fontSize = 14.sp
                         )
                     }
                 }

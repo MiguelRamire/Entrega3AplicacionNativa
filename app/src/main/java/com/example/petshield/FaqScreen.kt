@@ -20,7 +20,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
+import com.example.petshield.ui.theme.TextoMedio
 
 @Composable
 fun FaqScreen(
@@ -88,8 +90,8 @@ fun FaqScreen(
                 ) {
                     Text(
                         text = "Preguntas Frecuentes",
-                        color = if (selectedTab == 0) Color.White else CelesteFin,
-                        fontSize = 12.sp,
+                        color = if (selectedTab == 0) Color.White else CelesteTexto,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(vertical = 10.dp, horizontal = 12.dp),
                         textAlign = TextAlign.Center
@@ -106,8 +108,8 @@ fun FaqScreen(
                 ) {
                     Text(
                         text = "Contáctanos",
-                        color = if (selectedTab == 1) Color.White else CelesteFin,
-                        fontSize = 12.sp,
+                        color = if (selectedTab == 1) Color.White else CelesteTexto,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(vertical = 10.dp, horizontal = 12.dp),
                         textAlign = TextAlign.Center
@@ -152,13 +154,13 @@ fun FaqScreen(
                             text = "¿Tienes alguna duda directa?",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
-                            color = CelesteFin
+                            color = CelesteTexto
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
                             text = "Envíanos un mensaje o llámanos a nuestra línea de atención telefónica:\n\n📞 +1 800 PET SHIELD\n✉️ soporte@petshield.com",
-                            fontSize = 13.sp,
-                            color = Color.DarkGray,
+                            fontSize = 14.sp,
+                            color = TextoMedio,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -191,9 +193,9 @@ fun FaqAccordionItem(
             ) {
                 Text(
                     text = question,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = if (isExpanded) Color.White else CelesteFin,
+                    color = if (isExpanded) Color.White else CelesteTexto,
                     modifier = Modifier.weight(1f)
                 )
                 Icon(
@@ -208,9 +210,9 @@ fun FaqAccordionItem(
                     Spacer(modifier = Modifier.height(12.dp))
                     Text(
                         text = answer,
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         color = Color.White.copy(alpha = 0.95f),
-                        lineHeight = 16.sp
+                        lineHeight = 20.sp
                     )
                 }
             }
