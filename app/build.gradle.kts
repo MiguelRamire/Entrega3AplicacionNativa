@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.petshield"
+    namespace = "com.upb.petshield"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.petshield"
+        applicationId = "com.upb.petshield"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
