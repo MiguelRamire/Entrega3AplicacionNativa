@@ -25,6 +25,8 @@ import com.example.petshield.data.Mascota
 import com.example.petshield.ui.theme.CelesteFin
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
+import com.example.petshield.ui.theme.TextoPlaceholder
 
 @Composable
 fun AgregarMascotaScreen(
@@ -101,7 +103,7 @@ fun AgregarMascotaScreen(
             OutlinedTextField(
                 value = nombre,
                 onValueChange = { nombre = it },
-                placeholder = { Text("Ej. Max", color = CelesteFin.copy(alpha = 0.6f)) },
+                placeholder = { Text("Ej. Max", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = customTextFieldColors(FondoClaro, CelesteFin)
@@ -193,7 +195,7 @@ fun AgregarMascotaScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 contentPadding = PaddingValues(horizontal = 24.dp)
             ) {
-                Text(text = "Guardar", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Guardar", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -217,8 +219,8 @@ fun AgregarMascotaScreen(
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
                             text = "$nombre ya está registrado.\nPuedes completar su carnet.",
-                            fontSize = 12.sp,
-                            color = Color.DarkGray,
+                            fontSize = 14.sp,
+                            color = TextoMedio,
                             textAlign = TextAlign.Center
                         )
 
@@ -254,9 +256,9 @@ fun AgregarMascotaScreen(
 fun FormFieldLabel(label: String) {
     Text(
         text = label,
-        fontSize = 13.sp,
+        fontSize = 14.sp,
         fontWeight = FontWeight.Bold,
-        color = Color.DarkGray,
+        color = TextoMedio,
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 4.dp)

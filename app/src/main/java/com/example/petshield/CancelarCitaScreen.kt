@@ -15,8 +15,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
+import com.example.petshield.ui.theme.TextoSecundario
 
 @Composable
 fun CancelarCitaScreen(
@@ -62,9 +65,9 @@ fun CancelarCitaScreen(
         ) {
             Text(
                 text = "Consulta de vacunación programada. Se realizará la evaluación general de la mascota y se aplicarán las vacunas correspondientes según el calendario de inmunización.",
-                fontSize = 12.sp,
-                color = Color.DarkGray,
-                lineHeight = 16.sp
+                fontSize = 14.sp,
+                color = TextoMedio,
+                lineHeight = 20.sp
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -85,7 +88,7 @@ fun CancelarCitaScreen(
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = opcion,
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.Black
                     )
@@ -96,9 +99,9 @@ fun CancelarCitaScreen(
 
             Text(
                 text = "Por favor indícanos si deseas detallar la razón de la cancelación.",
-                fontSize = 12.sp,
-                color = CelesteFin,
-                lineHeight = 16.sp
+                fontSize = 14.sp,
+                color = CelesteTexto,
+                lineHeight = 20.sp
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -106,7 +109,7 @@ fun CancelarCitaScreen(
             OutlinedTextField(
                 value = detalleTexto,
                 onValueChange = { detalleTexto = it },
-                placeholder = { Text("Escribe Tu Motivo Aquí...", color = Color.Gray, fontSize = 13.sp) },
+                placeholder = { Text("Escribe Tu Motivo Aquí...", color = TextoSecundario, fontSize = 14.sp) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(140.dp),

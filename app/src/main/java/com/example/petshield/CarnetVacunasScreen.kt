@@ -23,8 +23,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.data.Mascota
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
 
 @Composable
 fun CarnetVacunasScreen(
@@ -80,7 +82,7 @@ fun CarnetVacunasScreen(
                     text = "Aún No Has\nRegistrado Datos\nDe Tu Mascota",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = CelesteFin,
+                    color = CelesteTexto,
                     textAlign = TextAlign.Center,
                     lineHeight = 28.sp
                 )
@@ -118,7 +120,7 @@ fun CarnetVacunasScreen(
                         text = "Mascotas Registradas",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = CelesteFin
+                        color = CelesteTexto
                     )
 
                     Button(
@@ -127,7 +129,7 @@ fun CarnetVacunasScreen(
                         shape = RoundedCornerShape(16.dp),
                         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                     ) {
-                        Text(text = "+ Agregar otra", color = CelesteFin, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        Text(text = "+ Agregar otra", color = CelesteTexto, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     }
                 }
 
@@ -178,12 +180,12 @@ fun MascotaCarnetCard(mascota: Mascota) {
                         text = mascota.nombre,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = CelesteFin
+                        color = CelesteTexto
                     )
                     Text(
                         text = "${mascota.especie} • ${mascota.raza} (${mascota.peso})",
-                        fontSize = 12.sp,
-                        color = Color.DarkGray
+                        fontSize = 14.sp,
+                        color = TextoMedio
                     )
                 }
             }
@@ -194,7 +196,7 @@ fun MascotaCarnetCard(mascota: Mascota) {
 
             Text(
                 text = "Registro de Vacunación",
-                fontSize = 13.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
@@ -212,7 +214,7 @@ fun MascotaCarnetCard(mascota: Mascota) {
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = vacuna, fontSize = 12.sp, color = Color.DarkGray)
+                    Text(text = vacuna, fontSize = 14.sp, color = TextoMedio)
                 }
             }
         }

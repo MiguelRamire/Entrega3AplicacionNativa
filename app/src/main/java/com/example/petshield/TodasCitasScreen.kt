@@ -26,7 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.data.Cita
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
+import com.example.petshield.ui.theme.TextoMedio
+import com.example.petshield.ui.theme.TextoSecundario
 
 @Composable
 fun TodasCitasScreen(
@@ -81,8 +84,8 @@ fun TodasCitasScreen(
                 ) {
                     Text(
                         text = "Proximas",
-                        color = if (selectedTab == 0) Color.White else CelesteFin,
-                        fontSize = 13.sp,
+                        color = if (selectedTab == 0) Color.White else CelesteTexto,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(vertical = 8.dp),
                         textAlign = TextAlign.Center
@@ -99,8 +102,8 @@ fun TodasCitasScreen(
                 ) {
                     Text(
                         text = "Anteriores",
-                        color = if (selectedTab == 1) Color.White else CelesteFin,
-                        fontSize = 13.sp,
+                        color = if (selectedTab == 1) Color.White else CelesteTexto,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(vertical = 8.dp),
                         textAlign = TextAlign.Center
@@ -119,8 +122,8 @@ fun TodasCitasScreen(
                 ) {
                     Text(
                         text = if (selectedTab == 0) "No tienes citas próximas." else "No tienes citas anteriores.",
-                        color = Color.Gray,
-                        fontSize = 14.sp
+                        color = TextoSecundario,
+                        fontSize = 16.sp
                     )
                 }
             } else {
@@ -170,14 +173,14 @@ fun CitaItemCard(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = cita.vetNombre,
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = CelesteFin
+                color = CelesteTexto
             )
             Text(
                 text = cita.servicio,
-                fontSize = 12.sp,
-                color = Color.DarkGray
+                fontSize = 14.sp,
+                color = TextoMedio
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -202,7 +205,7 @@ fun CitaItemCard(
                             modifier = Modifier.size(12.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text(text = cita.fechaStr, fontSize = 10.sp, color = Color.DarkGray)
+                        Text(text = cita.fechaStr, fontSize = 12.sp, color = TextoMedio)
                     }
                 }
 
@@ -222,7 +225,7 @@ fun CitaItemCard(
                             modifier = Modifier.size(12.dp)
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text(text = cita.horaStr, fontSize = 10.sp, color = Color.DarkGray)
+                        Text(text = cita.horaStr, fontSize = 12.sp, color = TextoMedio)
                     }
                 }
             }
@@ -242,7 +245,7 @@ fun CitaItemCard(
                     Text(
                         text = "Detalles",
                         color = Color.Black,
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(vertical = 6.dp),
                         textAlign = TextAlign.Center
