@@ -1,7 +1,6 @@
 package com.example.petshield
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -18,7 +17,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -32,10 +30,6 @@ fun DetalleServicioScreen(
     onReservarServicio: () -> Unit,
     onNavigateToTab: (BottomTab) -> Unit
 ) {
-    val colorCelesteInicio = Color(0xFF33E4DB)
-    val colorCelesteFin = Color(0xFF00BBD3)
-    val fondoClaro = Color(0xFFE9F6FE)
-
     var fechaSeleccionada by remember { mutableStateOf("Miércoles, 23 De Septiembre") }
     var horaSeleccionada by remember { mutableStateOf("3:00 PM") }
 
@@ -43,8 +37,6 @@ fun DetalleServicioScreen(
         topBar = {
             PetShieldTopBar(
                 title = "Consulta general",
-                onBack = onBack,
-                onNavigateToHome = { onNavigateToTab(BottomTab.HOME) }
             )
         },
         bottomBar = {
@@ -62,19 +54,16 @@ fun DetalleServicioScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
-            // Main item header
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
                         .size(64.dp)
                         .clip(CircleShape)
-                        .background(fondoClaro),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_clinics),
                         contentDescription = null,
-                        tint = colorCelesteFin,
                         modifier = Modifier.size(32.dp)
                     )
                 }
@@ -84,9 +73,7 @@ fun DetalleServicioScreen(
                 Column {
                     Text(
                         text = "CONSULTA GENERAL",
-                        fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
-                        color = colorCelesteFin
                     )
                     Text(
                         text = "Consulta veterinaria\ngeneral",
@@ -100,15 +87,12 @@ fun DetalleServicioScreen(
                             Icon(
                                 imageVector = Icons.Default.Star,
                                 contentDescription = null,
-                                tint = colorCelesteFin,
                                 modifier = Modifier.size(14.dp)
                             )
                         }
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = "4,9 · 128 reseñas",
-                            fontSize = 12.sp,
-                            color = colorCelesteFin,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -119,86 +103,58 @@ fun DetalleServicioScreen(
 
             Text(
                 text = "Evaluación clínica completa para conocer el estado de salud de tu mascota, resolver inquietudes y definir un plan de cuidado personalizado.",
-                fontSize = 13.sp,
-                color = Color.DarkGray,
-                lineHeight = 18.sp
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider(color = fondoClaro)
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Qué incluye
             Text(
                 text = "Qué incluye",
-                fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
-                color = colorCelesteFin
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "✓ Examen físico de nariz a cola", fontSize = 13.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "✓ Revisión de antecedentes y signos vitales", fontSize = 13.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "✓ Recomendaciones y fórmula digital", fontSize = 13.sp, color = Color.Black)
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Preparación requerida
             Text(
                 text = "Preparación requerida",
-                fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
-                color = colorCelesteFin
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "Trae el carnet de vacunas y exámenes recientes. No requiere ayuno.",
-                fontSize = 13.sp,
-                color = Color.DarkGray
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Stats row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
-                    Text(text = "Duración", fontSize = 11.sp, color = Color.Gray)
-                    Text(text = "30 minutos", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                 }
                 Column {
-                    Text(text = "Modalidad", fontSize = 11.sp, color = Color.Gray)
-                    Text(text = "En clínica", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                 }
                 Column {
-                    Text(text = "Precio", fontSize = 11.sp, color = Color.Gray)
-                    Text(text = "Desde $65.000", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                 }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Box Fecha y Hora
             Surface(
                 modifier = Modifier.fillMaxWidth(),
-                color = fondoClaro,
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "Fecha y hora",
-                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color = colorCelesteFin
                     )
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    // Fecha Dropdown
                     Surface(
-                        modifier = Modifier.fillMaxWidth(),
                         color = Color.White,
                         shape = RoundedCornerShape(20.dp)
                     ) {
@@ -213,30 +169,24 @@ fun DetalleServicioScreen(
                                 Icon(
                                     imageVector = Icons.Default.DateRange,
                                     contentDescription = null,
-                                    tint = colorCelesteFin,
                                     modifier = Modifier.size(20.dp)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = fechaSeleccionada,
-                                    color = colorCelesteFin,
-                                    fontSize = 13.sp,
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
                                 contentDescription = null,
-                                tint = colorCelesteFin
                             )
                         }
                     }
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // Hora Dropdown
                     Surface(
-                        modifier = Modifier.fillMaxWidth(),
                         color = Color.White,
                         shape = RoundedCornerShape(20.dp)
                     ) {
@@ -251,21 +201,17 @@ fun DetalleServicioScreen(
                                 Icon(
                                     imageVector = Icons.Outlined.Schedule,
                                     contentDescription = null,
-                                    tint = colorCelesteFin,
                                     modifier = Modifier.size(20.dp)
                                 )
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = horaSeleccionada,
-                                    color = colorCelesteFin,
-                                    fontSize = 13.sp,
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,
                                 contentDescription = null,
-                                tint = colorCelesteFin
                             )
                         }
                     }
@@ -274,7 +220,6 @@ fun DetalleServicioScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Botón Reservar Servicio
             Button(
                 onClick = {
                     viewModel.reservaActual = viewModel.reservaActual.copy(
@@ -287,7 +232,6 @@ fun DetalleServicioScreen(
                     .fillMaxWidth()
                     .height(50.dp)
                     .background(
-                        brush = Brush.horizontalGradient(listOf(colorCelesteInicio, colorCelesteFin)),
                         shape = RoundedCornerShape(25.dp)
                     ),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -303,7 +247,6 @@ fun DetalleServicioScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Otros servicios
             ServiceMiniCard(category = "PROCEDIMIENTO", title = "Vacunacion", rating = "4,9 · 128 reseñas")
             Spacer(modifier = Modifier.height(12.dp))
             ServiceMiniCard(category = "TRATAMIENTO", title = "Desparasitacion", rating = "4,9 · 128 reseñas")
@@ -313,9 +256,6 @@ fun DetalleServicioScreen(
 
 @Composable
 fun ServiceMiniCard(category: String, title: String, rating: String) {
-    val colorCelesteFin = Color(0xFF00BBD3)
-    val fondoClaro = Color(0xFFE9F6FE)
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -327,31 +267,25 @@ fun ServiceMiniCard(category: String, title: String, rating: String) {
             modifier = Modifier
                 .size(50.dp)
                 .clip(CircleShape)
-                .background(fondoClaro),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_clinics),
                 contentDescription = null,
-                tint = colorCelesteFin,
                 modifier = Modifier.size(24.dp)
             )
         }
         Spacer(modifier = Modifier.width(12.dp))
         Column {
-            Text(text = category, fontSize = 10.sp, color = colorCelesteFin, fontWeight = FontWeight.Bold)
-            Text(text = title, fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.Black)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 repeat(5) {
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
-                        tint = colorCelesteFin,
                         modifier = Modifier.size(12.dp)
                     )
                 }
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = rating, fontSize = 11.sp, color = colorCelesteFin)
             }
         }
     }

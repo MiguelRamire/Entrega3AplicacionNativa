@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -40,9 +39,6 @@ fun PerfilScreen(
     onLogout: () -> Unit,
     onNavigateToTab: (BottomTab) -> Unit
 ) {
-    val colorCelesteInicio = Color(0xFF33E4DB)
-    val colorCelesteFin = Color(0xFF00BBD3)
-    val fondoClaro = Color(0xFFE9F6FE)
 
     Scaffold(
         bottomBar = {
@@ -59,11 +55,9 @@ fun PerfilScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            // HEADER PROFILE SECTION (CYAN)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Brush.horizontalGradient(listOf(colorCelesteInicio, colorCelesteFin)))
                     .padding(top = 28.dp, bottom = 24.dp, start = 16.dp, end = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -100,7 +94,6 @@ fun PerfilScreen(
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    // Photo with edit badge
                     Box(
                         modifier = Modifier.size(90.dp),
                         contentAlignment = Alignment.BottomEnd
@@ -109,10 +102,8 @@ fun PerfilScreen(
                             modifier = Modifier
                                 .size(86.dp)
                                 .clip(CircleShape)
-                                .background(fondoClaro),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(text = "👩", fontSize = 42.sp)
                         }
 
                         Box(
@@ -120,14 +111,12 @@ fun PerfilScreen(
                                 .size(28.dp)
                                 .clip(CircleShape)
                                 .background(Color.White)
-                                .border(1.dp, colorCelesteFin, CircleShape)
                                 .clickable { },
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Editar",
-                                tint = colorCelesteFin,
                                 modifier = Modifier.size(16.dp)
                             )
                         }
@@ -146,12 +135,10 @@ fun PerfilScreen(
                         Text(
                             text = viewModel.usuarioTelefono,
                             color = Color.White.copy(alpha = 0.9f),
-                            fontSize = 13.sp
                         )
                         Text(
                             text = viewModel.usuarioEmail,
                             color = Color.White.copy(alpha = 0.9f),
-                            fontSize = 13.sp
                         )
                     }
                 }
@@ -159,7 +146,6 @@ fun PerfilScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // MENU ITEMS LIST
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -209,8 +195,6 @@ fun PerfilMenuItem(
     showChevron: Boolean = true,
     onClick: () -> Unit
 ) {
-    val colorCelesteFin = Color(0xFF00BBD3)
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -222,7 +206,6 @@ fun PerfilMenuItem(
             modifier = Modifier
                 .size(46.dp)
                 .clip(CircleShape)
-                .background(colorCelesteFin),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -247,7 +230,6 @@ fun PerfilMenuItem(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
-                tint = colorCelesteFin
             )
         }
     }

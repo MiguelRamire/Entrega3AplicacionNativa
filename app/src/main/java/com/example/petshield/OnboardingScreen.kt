@@ -1,5 +1,3 @@
-package com.example.petshield // Asegúrate de que coincida con tu paquete
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,16 +35,9 @@ fun OnboardingScreen(
     val pagerState = rememberPagerState(pageCount = { 3 })
     val coroutineScope = rememberCoroutineScope()
 
-    val colorDegradadoInicio = Color(0xFF33E4DB)
-    val colorDegradadoFin = Color(0xFF00BBD3)
-    val colorPuntoInactivo = Color(0xFFE9F6FE)
-
-    // Definimos las 3 páginas con sus recursos de imagen y textos oficiales
     val pages = listOf(
         OnboardingPage(
-            imageRes = R.drawable.a_onboardin, // Asegúrate de tener los drawables generados
             title = "Gestiona Tus\nMascotas",
-            description = "PetShield te ayuda a guardar toda la información medica de tus mascotas en un solo lugar."
         ),
         OnboardingPage(
             imageRes = R.drawable.b_onboardin,
@@ -67,7 +58,6 @@ fun OnboardingScreen(
             .padding(top = 40.dp, bottom = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // --- BOTÓN OMITIR SUPERIOR ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,15 +71,11 @@ fun OnboardingScreen(
                 ) {
                     Text(
                         text = "Omitir",
-                        color = colorDegradadoFin,
-                        fontSize = 14.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = ">",
-                        color = colorDegradadoFin,
-                        fontSize = 14.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -98,7 +84,6 @@ fun OnboardingScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- PAGER DESLIZABLE ---
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
@@ -112,7 +97,6 @@ fun OnboardingScreen(
                     .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Imagen de la ilustración de la pantalla
                 Image(
                     painter = painterResource(id = item.imageRes),
                     contentDescription = "Ilustración Onboarding",
@@ -123,25 +107,19 @@ fun OnboardingScreen(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Título principal
                 Text(
                     text = item.title,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = colorDegradadoFin,
                     textAlign = TextAlign.Center,
                     lineHeight = 28.sp
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Descripción
                 Text(
                     text = item.description,
-                    fontSize = 12.sp,
-                    color = Color.Gray,
                     textAlign = TextAlign.Center,
-                    lineHeight = 18.sp,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
@@ -149,7 +127,6 @@ fun OnboardingScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // --- INDICADORES DE PUNTOS ---
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -162,7 +139,6 @@ fun OnboardingScreen(
                         .padding(4.dp)
                         .size(if (isSelected) 10.dp else 8.dp)
                         .background(
-                            brush = if (isSelected) Brush.horizontalGradient(listOf(colorDegradadoInicio, colorDegradadoFin)) else Brush.linearGradient(listOf(colorPuntoInactivo, colorPuntoInactivo)),
                             shape = CircleShape
                         )
                 )
@@ -171,7 +147,6 @@ fun OnboardingScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // --- BOTÓN INFERIOR (Siguiente / Comenzar) ---
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -191,7 +166,6 @@ fun OnboardingScreen(
                     .fillMaxWidth()
                     .height(50.dp)
                     .background(
-                        brush = Brush.horizontalGradient(listOf(colorDegradadoInicio, colorDegradadoFin)),
                         shape = RoundedCornerShape(25.dp)
                     ),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),

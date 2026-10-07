@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,16 +25,11 @@ fun PetShieldTopBar(
     subtitle: String? = null,
     searchQuery: String? = null,
     onSearchChange: ((String) -> Unit)? = null,
-    onNavigateToHome: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    val colorInicio = Color(0xFF33E4DB)
-    val colorFin = Color(0xFF00BBD3)
-
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(Brush.horizontalGradient(listOf(colorInicio, colorFin)))
             .padding(top = 28.dp, bottom = if (searchQuery != null) 16.dp else 12.dp, start = 16.dp, end = 16.dp)
     ) {
         Row(
@@ -66,31 +60,24 @@ fun PetShieldTopBar(
                     Text(
                         text = subtitle,
                         color = Color.White.copy(alpha = 0.9f),
-                        fontSize = 12.sp,
                         textAlign = TextAlign.Center
                     )
                 }
             }
 
-            IconButton(
-                onClick = { onNavigateToHome?.invoke() }
-            ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_logo_blanco),
                     contentDescription = "Logo PetShield",
                     modifier = Modifier.size(32.dp)
                 )
             }
-        }
 
         if (searchQuery != null && onSearchChange != null) {
             Spacer(modifier = Modifier.height(10.dp))
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(42.dp)
                     .padding(horizontal = 12.dp),
-                shape = RoundedCornerShape(21.dp),
                 color = Color.White
             ) {
                 Row(
@@ -100,14 +87,12 @@ fun PetShieldTopBar(
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Buscar",
-                        tint = colorFin,
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = onSearchChange,
-                        placeholder = { Text("Buscar...", color = colorFin.copy(alpha = 0.6f), fontSize = 14.sp) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         colors = TextFieldDefaults.colors(

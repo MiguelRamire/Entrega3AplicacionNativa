@@ -5,72 +5,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.example.petshield.data.CitaModel
-import com.example.petshield.data.ClinicaModel
 import com.example.petshield.data.FirebaseRepository
 import com.example.petshield.data.MascotaModel
-import com.example.petshield.data.VeterinarioModel
-
-data class Mascota(
-    val id: String,
-    val nombre: String,
-    val especie: String,
-    val raza: String,
-    val peso: String,
-    val fechaNacimiento: String,
-    val sexo: String,
-    val vacunas: List<String> = listOf("Rabia (Completada)", "Triple Viral (Completada)", "Refuerzo Anual (Pendiente)")
-)
-
-data class Clinica(
-    val id: String,
-    val nombre: String,
-    val direccion: String,
-    val horario: String,
-    val calificacion: Float = 4.9f,
-    val esRecomendada: Boolean = true,
-    var esFavorita: Boolean = true
-)
-
-data class Veterinario(
-    val id: String,
-    val clinicaId: String = "",
-    val nombre: String,
-    val especialidad: String,
-    val clinicaTag: String,
-    var esFavorito: Boolean = true
-)
-
-data class Cita(
-    val id: String,
-    val vetNombre: String,
-    val servicio: String,
-    val fechaStr: String,
-    val horaStr: String,
-    val esProxima: Boolean = true,
-    val mascotaNombre: String = "Max",
-    val modalidad: String = "En clínica",
-    val lugar: String = "Clínica PetCare · Poblado"
-)
-
-data class DatosReserva(
-    val clinicaId: String = "",
-    val servicioId: String = "",
-    val mascotaId: String = "",
-    val mascotaNombre: String = "Max · Golden Retriever",
-    val servicioNombre: String = "Consulta veterinaria general",
-    val profesionalNombre: String = "Dra. Ana Jiménez, MV",
-    val fechaStr: String = "Miércoles, 23 de septiembre",
-    val horaStr: String = "3:00 PM",
-    val modalidad: String = "En clínica",
-    val lugar: String = "PetCare Clínica Veterinaria",
-    val precioConsulta: String = "$65.000",
-    val tarifaServicio: String = "$3.500",
-    val total: String = "$68.500"
-)
 
 class PetShieldViewModel(
     private val repository: FirebaseRepository = FirebaseRepository()
-) {
     // Usuario
     var usuarioId by mutableStateOf("usuario_demo")
     var usuarioNombre by mutableStateOf("Ada")
@@ -108,12 +47,7 @@ class PetShieldViewModel(
         cargarCitasDesdeFirebase()
     }
 
-    fun esUsuarioAutenticado(): Boolean {
-        return repository.obtenerUsuarioActual() != null
-    }
-
     fun cargarDatosUsuario(uid: String) {
-        repository.obtenerUsuario(uid) { perfil ->
             if (perfil != null) {
                 usuarioNombre = perfil.nombre.ifBlank { usuarioNombre }
                 usuarioTelefono = perfil.telefono.ifBlank { usuarioTelefono }
@@ -131,8 +65,6 @@ class PetShieldViewModel(
             onResult(false, "Por favor ingresa tu correo y contraseña")
             return
         }
-        repository.iniciarSesion(email, pass) { exito, error ->
-            if (exito) {
                 val currentUser = repository.obtenerUsuarioActual()
                 if (currentUser != null) {
                     usuarioId = currentUser.uid
@@ -142,8 +74,6 @@ class PetShieldViewModel(
                     cargarCitasDesdeFirebase()
                 }
                 onResult(true, null)
-            } else {
-                onResult(false, error ?: "Correo o contraseña incorrectos")
             }
         }
     }
@@ -152,8 +82,6 @@ class PetShieldViewModel(
         idToken: String,
         onResult: (Boolean, String?) -> Unit
     ) {
-        repository.iniciarSesionConGoogleToken(idToken) { exito, error ->
-            if (exito) {
                 val currentUser = repository.obtenerUsuarioActual()
                 if (currentUser != null) {
                     usuarioId = currentUser.uid
@@ -164,8 +92,6 @@ class PetShieldViewModel(
                     cargarCitasDesdeFirebase()
                 }
                 onResult(true, null)
-            } else {
-                onResult(false, error ?: "Error al iniciar sesión con Google")
             }
         }
     }
@@ -185,8 +111,6 @@ class PetShieldViewModel(
             onResult(false, "La contraseña debe tener al menos 6 caracteres")
             return
         }
-        repository.registrarUsuario(email, pass, nombre, telefono) { exito, error ->
-            if (exito) {
                 val currentUser = repository.obtenerUsuarioActual()
                 if (currentUser != null) {
                     usuarioId = currentUser.uid
@@ -196,8 +120,6 @@ class PetShieldViewModel(
                     cargarCitasDesdeFirebase()
                 }
                 onResult(true, null)
-            } else {
-                onResult(false, error ?: "Error al registrar el usuario")
             }
         }
     }
@@ -213,7 +135,6 @@ class PetShieldViewModel(
     }
 
     fun cargarMascotasDesdeFirebase() {
-        repository.obtenerMascotasPorUsuario(usuarioId) { listaFirebase ->
             if (listaFirebase.isNotEmpty()) {
                 mascotas.clear()
                 listaFirebase.forEach { item ->
@@ -234,7 +155,6 @@ class PetShieldViewModel(
     }
 
     fun cargarClinicasDesdeFirebase() {
-        repository.obtenerClinicas { listaFirebase ->
             if (listaFirebase.isNotEmpty()) {
                 clinicas.clear()
                 listaFirebase.forEach { item ->
@@ -255,7 +175,6 @@ class PetShieldViewModel(
     }
 
     fun cargarVeterinariosDesdeFirebase() {
-        repository.obtenerVeterinarios { listaFirebase ->
             if (listaFirebase.isNotEmpty()) {
                 veterinarios.clear()
                 listaFirebase.forEach { item ->
@@ -279,7 +198,6 @@ class PetShieldViewModel(
             citas.clear()
             return
         }
-        repository.obtenerCitasPorUsuario(usuarioId) { listaFirebase ->
             citas.clear()
             if (listaFirebase.isNotEmpty()) {
                 listaFirebase.forEach { item ->
@@ -304,8 +222,6 @@ class PetShieldViewModel(
 
     fun agregarMascota(mascota: Mascota) {
         mascotas.add(mascota)
-
-        // Guardar en Firebase Firestore
         val modeloFirestore = MascotaModel(
             usuarioId = usuarioId,
             nombre = mascota.nombre,
@@ -315,8 +231,6 @@ class PetShieldViewModel(
             fechaNacimiento = mascota.fechaNacimiento,
             sexo = mascota.sexo
         )
-        repository.agregarMascota(modeloFirestore) { exito, error ->
-            // Se guardó en Firestore
         }
     }
 
@@ -358,7 +272,6 @@ class PetShieldViewModel(
         )
         citas.add(0, nuevaCita)
 
-        // Guardar la cita en Firebase Firestore con IDs reales de clinicas y mascotas
         val modeloCita = CitaModel(
             usuarioId = usuarioId,
             mascotaId = idMascotaReal,
@@ -371,14 +284,12 @@ class PetShieldViewModel(
             hora = reservaActual.horaStr,
             estado = "Confirmada"
         )
-        repository.crearCita(modeloCita) { exito, error ->
             cargarCitasDesdeFirebase()
         }
     }
 
     fun cancelarCita(id: String) {
         citas.removeAll { it.id == id }
-        repository.cancelarCita(id, "Cancelada por el usuario") { exito ->
             cargarCitasDesdeFirebase()
         }
     }

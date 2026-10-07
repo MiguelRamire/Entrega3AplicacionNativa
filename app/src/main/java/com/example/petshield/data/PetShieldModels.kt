@@ -96,7 +96,6 @@ data class CitaModel(
     val fecha: String = "",
     val hora: String = "",
     val precio: Double = 0.0,
-    val estado: String = "Pendiente", // "Pendiente", "Confirmada", "Completada", "Cancelada"
     val motivoCancelacion: String = "",
     val fechaCreacion: Long = System.currentTimeMillis()
 )
