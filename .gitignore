@@ -1,15 +1,33 @@
-*.iml
-.gradle
+# =========================================================================
+# Archivos de entorno y configuraciones locales / secretas
+# =========================================================================
+local.properties
 /local.properties
+.DS_Store
+
+# =========================================================================
+# Archivos de configuración del IDE (IntelliJ / Android Studio)
+# =========================================================================
+*.iml
+.idea/
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
-.DS_Store
+
+# =========================================================================
+# Archivos de compilación y caché de Gradle / Kotlin
+# =========================================================================
+.gradle/
+.kotlin/
 /build
+*/build
+
+# =========================================================================
+# Archivos de capturas, análisis y código nativo (C/C++)
+# =========================================================================
 /captures
 .externalNativeBuild
-.cxx
-local.properties
+.cxx/
