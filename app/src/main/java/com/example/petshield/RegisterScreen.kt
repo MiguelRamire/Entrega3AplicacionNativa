@@ -22,10 +22,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
 import com.example.petshield.ui.theme.CelesteInicio
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.ErrorRedBg
 import com.example.petshield.ui.theme.ErrorRedText
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
+import com.example.petshield.ui.theme.TextoPlaceholder
+import com.example.petshield.ui.theme.TextoSecundario
 
 @Composable
 fun RegisterScreen(
@@ -81,7 +85,7 @@ fun RegisterScreen(
                 text = "Crea tu Cuenta",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = CelesteInicio,
+                color = CelesteTexto,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -97,19 +101,19 @@ fun RegisterScreen(
                     Text(
                         text = msg,
                         color = ErrorRedText,
-                        fontSize = 13.sp,
+                        fontSize = 14.sp,
                         modifier = Modifier.padding(12.dp)
                     )
                 }
             }
 
             // 1. Campo Nombre
-            Text(text = "Nombre completo", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray, modifier = Modifier.fillMaxWidth())
+            Text(text = "Nombre completo", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextoMedio, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it; errorMessage = null },
-                placeholder = { Text("Ej. Juan Pérez", color = CelesteInicio) },
+                placeholder = { Text("Ej. Juan Pérez", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
@@ -126,12 +130,12 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // 2. Campo Contraseña
-            Text(text = "Contraseña", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray, modifier = Modifier.fillMaxWidth())
+            Text(text = "Contraseña", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextoMedio, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it; errorMessage = null },
-                placeholder = { Text("Mínimo 6 caracteres", color = CelesteInicio) },
+                placeholder = { Text("Mínimo 6 caracteres", color = TextoPlaceholder) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -149,12 +153,12 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // 3. Campo Correo
-            Text(text = "Correo electrónico", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray, modifier = Modifier.fillMaxWidth())
+            Text(text = "Correo electrónico", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextoMedio, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it; errorMessage = null },
-                placeholder = { Text("example@example.com", color = CelesteInicio) },
+                placeholder = { Text("example@example.com", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
@@ -171,12 +175,12 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // 4. Campo Teléfono
-            Text(text = "Número de teléfono", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray, modifier = Modifier.fillMaxWidth())
+            Text(text = "Número de teléfono", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextoMedio, modifier = Modifier.fillMaxWidth())
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = phone,
                 onValueChange = { phone = it; errorMessage = null },
-                placeholder = { Text("+57 300 000 0000", color = CelesteInicio) },
+                placeholder = { Text("+57 300 000 0000", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
@@ -194,8 +198,8 @@ fun RegisterScreen(
 
             Text(
                 text = "Al continuar, aceptas los\nTérminos de Uso y Política de Privacidad.",
-                fontSize = 10.sp,
-                color = Color.Gray,
+                fontSize = 12.sp,
+                color = TextoSecundario,
                 textAlign = TextAlign.Center
             )
 
@@ -245,11 +249,11 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Row {
-                Text("¿Ya tienes una cuenta? ", fontSize = 12.sp, color = Color.Gray)
+                Text("¿Ya tienes una cuenta? ", fontSize = 14.sp, color = TextoSecundario)
                 Text(
                     text = "Inicia Sesión",
-                    fontSize = 12.sp,
-                    color = CelesteFin,
+                    fontSize = 14.sp,
+                    color = CelesteTexto,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable { onNavigateToLogin() }
                 )

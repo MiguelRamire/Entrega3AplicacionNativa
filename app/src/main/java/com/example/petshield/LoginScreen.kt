@@ -23,10 +23,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
 import com.example.petshield.ui.theme.CelesteInicio
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.ErrorRedBg
 import com.example.petshield.ui.theme.ErrorRedText
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
+import com.example.petshield.ui.theme.TextoPlaceholder
+import com.example.petshield.ui.theme.TextoSecundario
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -110,7 +114,7 @@ fun LoginScreen(
                 text = "¡Bienvenido De Nuevo!",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                color = CelesteInicio
+                color = CelesteTexto
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -125,19 +129,19 @@ fun LoginScreen(
                     Text(
                         text = msg,
                         color = ErrorRedText,
-                        fontSize = 13.sp,
+                        fontSize = 14.sp,
                         modifier = Modifier.padding(12.dp)
                     )
                 }
             }
 
             // Campo Correo
-            Text(text = "Correo Electrónico", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray)
+            Text(text = "Correo Electrónico", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextoMedio)
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it; errorMessage = null },
-                placeholder = { Text("example@example.com", color = CelesteInicio) },
+                placeholder = { Text("example@example.com", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
                 colors = TextFieldDefaults.colors(
@@ -154,12 +158,12 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // Campo Contraseña
-            Text(text = "Contraseña", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.DarkGray)
+            Text(text = "Contraseña", fontSize = 16.sp, fontWeight = FontWeight.SemiBold, color = TextoMedio)
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it; errorMessage = null },
-                placeholder = { Text("*************", color = CelesteInicio) },
+                placeholder = { Text("*************", color = TextoPlaceholder) },
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -177,8 +181,8 @@ fun LoginScreen(
             // ¿Olvidaste tu contraseña?
             Text(
                 text = "¿Olvidaste tu contraseña?",
-                color = CelesteFin,
-                fontSize = 12.sp,
+                color = CelesteTexto,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .align(Alignment.End)
@@ -231,7 +235,7 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text("o inicia sesión con:", fontSize = 12.sp, color = Color.Gray)
+                Text("o inicia sesión con:", fontSize = 14.sp, color = TextoSecundario)
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Box(
@@ -266,11 +270,11 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Row {
-                    Text("¿No tienes cuenta? ", fontSize = 12.sp, color = Color.Gray)
+                    Text("¿No tienes cuenta? ", fontSize = 14.sp, color = TextoSecundario)
                     Text(
                         text = "Crea una",
-                        fontSize = 12.sp,
-                        color = CelesteFin,
+                        fontSize = 14.sp,
+                        color = CelesteTexto,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.clickable { onNavigateToRegister() }
                     )

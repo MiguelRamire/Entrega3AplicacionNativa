@@ -23,8 +23,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoSecundario
 import kotlinx.coroutines.launch
 
 data class OnboardingPage(
@@ -78,15 +80,15 @@ fun OnboardingScreen(
                 ) {
                     Text(
                         text = "Omitir",
-                        color = CelesteFin,
-                        fontSize = 14.sp,
+                        color = CelesteTexto,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = ">",
-                        color = CelesteFin,
-                        fontSize = 14.sp,
+                        color = CelesteTexto,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -122,7 +124,7 @@ fun OnboardingScreen(
                     text = item.title,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
-                    color = CelesteFin,
+                    color = CelesteTexto,
                     textAlign = TextAlign.Center,
                     lineHeight = 28.sp
                 )
@@ -131,10 +133,10 @@ fun OnboardingScreen(
 
                 Text(
                     text = item.description,
-                    fontSize = 12.sp,
-                    color = Color.Gray,
+                    fontSize = 14.sp,
+                    color = TextoSecundario,
                     textAlign = TextAlign.Center,
-                    lineHeight = 18.sp,
+                    lineHeight = 22.sp,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }

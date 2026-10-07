@@ -17,8 +17,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
 
 @Composable
 fun WelcomeScreen(
@@ -45,17 +47,17 @@ fun WelcomeScreen(
             text = "PetShield",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
-            color = CelesteFin
+            color = CelesteTexto
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
             text = "PetShield te ayuda a mantener al día la salud de tu mascota con un seguimiento completo de vacunas, desparasitaciones y citas veterinarias.",
-            fontSize = 14.sp,
-            color = Color.DarkGray,
+            fontSize = 16.sp,
+            color = TextoMedio,
             textAlign = TextAlign.Center,
-            lineHeight = 20.sp
+            lineHeight = 24.sp
         )
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -85,7 +87,7 @@ fun WelcomeScreen(
             colors = ButtonDefaults.buttonColors(containerColor = FondoClaro),
             shape = RoundedCornerShape(25.dp)
         ) {
-            Text(text = "Registrarse", color = CelesteFin, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = "Registrarse", color = CelesteTexto, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
     }
 }
