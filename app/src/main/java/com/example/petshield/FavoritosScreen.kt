@@ -22,8 +22,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.data.Veterinario
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
+import com.example.petshield.ui.theme.TextoSecundario
 
 @Composable
 fun FavoritosScreen(
@@ -60,7 +63,7 @@ fun FavoritosScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(vertical = 8.dp)
             ) {
-                Text(text = "Ordenar Por", fontSize = 13.sp, color = Color.DarkGray)
+                Text(text = "Ordenar Por", fontSize = 14.sp, color = TextoMedio)
                 Spacer(modifier = Modifier.width(8.dp))
                 Surface(
                     shape = RoundedCornerShape(12.dp),
@@ -69,7 +72,7 @@ fun FavoritosScreen(
                     Text(
                         text = "A → Z",
                         color = Color.White,
-                        fontSize = 11.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
                     )
@@ -138,26 +141,26 @@ fun VetCard(
                         .background(CelesteFin),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "🎖️", fontSize = 10.sp)
+                    Text(text = "🎖️", fontSize = 12.sp)
                 }
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = vet.clinicaTag,
-                    fontSize = 11.sp,
-                    color = Color.DarkGray
+                    fontSize = 12.sp,
+                    color = TextoMedio
                 )
             }
 
             Text(
                 text = vet.nombre,
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = CelesteFin
+                color = CelesteTexto
             )
             Text(
                 text = vet.especialidad,
-                fontSize = 12.sp,
-                color = Color.Gray
+                fontSize = 14.sp,
+                color = TextoSecundario
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -174,7 +177,7 @@ fun VetCard(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 contentPadding = PaddingValues()
             ) {
-                Text(text = "Agendar Cita", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Agendar Cita", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
             }
         }
 

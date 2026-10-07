@@ -23,8 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
+import com.example.petshield.ui.theme.TextoSecundario
 
 @Composable
 fun DetalleServicioScreen(
@@ -79,9 +82,9 @@ fun DetalleServicioScreen(
                 Column {
                     Text(
                         text = "CONSULTA GENERAL",
-                        fontSize = 11.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = CelesteFin
+                        color = CelesteTexto
                     )
                     Text(
                         text = "Consulta veterinaria\ngeneral",
@@ -102,8 +105,8 @@ fun DetalleServicioScreen(
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = "4,9 · 128 reseñas",
-                            fontSize = 12.sp,
-                            color = CelesteFin,
+                            fontSize = 14.sp,
+                            color = CelesteTexto,
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -114,9 +117,9 @@ fun DetalleServicioScreen(
 
             Text(
                 text = "Evaluación clínica completa para conocer el estado de salud de tu mascota, resolver inquietudes y definir un plan de cuidado personalizado.",
-                fontSize = 13.sp,
-                color = Color.DarkGray,
-                lineHeight = 18.sp
+                fontSize = 14.sp,
+                color = TextoMedio,
+                lineHeight = 22.sp
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -125,30 +128,30 @@ fun DetalleServicioScreen(
 
             Text(
                 text = "Qué incluye",
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = CelesteFin
+                color = CelesteTexto
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "✓ Examen físico de nariz a cola", fontSize = 13.sp, color = Color.Black)
+            Text(text = "✓ Examen físico de nariz a cola", fontSize = 14.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "✓ Revisión de antecedentes y signos vitales", fontSize = 13.sp, color = Color.Black)
+            Text(text = "✓ Revisión de antecedentes y signos vitales", fontSize = 14.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = "✓ Recomendaciones y fórmula digital", fontSize = 13.sp, color = Color.Black)
+            Text(text = "✓ Recomendaciones y fórmula digital", fontSize = 14.sp, color = Color.Black)
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 text = "Preparación requerida",
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = CelesteFin
+                color = CelesteTexto
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = "Trae el carnet de vacunas y exámenes recientes. No requiere ayuno.",
-                fontSize = 13.sp,
-                color = Color.DarkGray
+                fontSize = 14.sp,
+                color = TextoMedio
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -158,16 +161,16 @@ fun DetalleServicioScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column {
-                    Text(text = "Duración", fontSize = 11.sp, color = Color.Gray)
-                    Text(text = "30 minutos", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text(text = "Duración", fontSize = 12.sp, color = TextoSecundario)
+                    Text(text = "30 minutos", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                 }
                 Column {
-                    Text(text = "Modalidad", fontSize = 11.sp, color = Color.Gray)
-                    Text(text = "En clínica", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text(text = "Modalidad", fontSize = 12.sp, color = TextoSecundario)
+                    Text(text = "En clínica", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                 }
                 Column {
-                    Text(text = "Precio", fontSize = 11.sp, color = Color.Gray)
-                    Text(text = "Desde $65.000", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                    Text(text = "Precio", fontSize = 12.sp, color = TextoSecundario)
+                    Text(text = "Desde $65.000", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
                 }
             }
 
@@ -181,9 +184,9 @@ fun DetalleServicioScreen(
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "Fecha y hora",
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = CelesteFin
+                        color = CelesteTexto
                     )
                     Spacer(modifier = Modifier.height(12.dp))
 
@@ -209,8 +212,8 @@ fun DetalleServicioScreen(
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = fechaSeleccionada,
-                                    color = CelesteFin,
-                                    fontSize = 13.sp,
+                                    color = CelesteTexto,
+                                    fontSize = 14.sp,
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
@@ -246,8 +249,8 @@ fun DetalleServicioScreen(
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
                                     text = horaSeleccionada,
-                                    color = CelesteFin,
-                                    fontSize = 13.sp,
+                                    color = CelesteTexto,
+                                    fontSize = 14.sp,
                                     fontWeight = FontWeight.SemiBold
                                 )
                             }
@@ -323,8 +326,8 @@ fun ServiceMiniCard(category: String, title: String, rating: String) {
         }
         Spacer(modifier = Modifier.width(12.dp))
         Column {
-            Text(text = category, fontSize = 10.sp, color = CelesteFin, fontWeight = FontWeight.Bold)
-            Text(text = title, fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+            Text(text = category, fontSize = 12.sp, color = CelesteTexto, fontWeight = FontWeight.Bold)
+            Text(text = title, fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
             Row(verticalAlignment = Alignment.CenterVertically) {
                 repeat(5) {
                     Icon(
@@ -335,7 +338,7 @@ fun ServiceMiniCard(category: String, title: String, rating: String) {
                     )
                 }
                 Spacer(modifier = Modifier.width(4.dp))
-                Text(text = rating, fontSize = 11.sp, color = CelesteFin)
+                Text(text = rating, fontSize = 12.sp, color = CelesteTexto)
             }
         }
     }

@@ -16,8 +16,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoSecundario
 
 @Composable
 fun ResumenReservaScreen(
@@ -59,9 +61,9 @@ fun ResumenReservaScreen(
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "TODO LISTO PARA SU MASCOTA",
-                        fontSize = 11.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = CelesteFin
+                        color = CelesteTexto
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
@@ -103,33 +105,33 @@ fun ResumenReservaScreen(
                 Column(modifier = Modifier.padding(16.dp)) {
                     Text(
                         text = "Desglose de precio",
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = CelesteFin
+                        color = CelesteTexto
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Consulta", fontSize = 13.sp, color = Color.Gray)
-                        Text(text = reserva.precioConsulta, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
+                        Text(text = "Consulta", fontSize = 14.sp, color = TextoSecundario)
+                        Text(text = reserva.precioConsulta, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
                     }
                     Spacer(modifier = Modifier.height(4.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Tarifa de servicio", fontSize = 13.sp, color = Color.Gray)
-                        Text(text = reserva.tarifaServicio, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
+                        Text(text = "Tarifa de servicio", fontSize = 14.sp, color = TextoSecundario)
+                        Text(text = reserva.tarifaServicio, fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.Black)
                     }
                     HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp), color = Color.White)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Total", fontSize = 15.sp, fontWeight = FontWeight.Bold, color = Color.Black)
-                        Text(text = reserva.total, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = CelesteFin)
+                        Text(text = "Total", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+                        Text(text = reserva.total, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = CelesteTexto)
                     }
                 }
             }
@@ -138,8 +140,8 @@ fun ResumenReservaScreen(
 
             Text(
                 text = "Cancelación gratuita hasta 4 horas antes.",
-                fontSize = 11.sp,
-                color = Color.Gray,
+                fontSize = 12.sp,
+                color = TextoSecundario,
                 textAlign = TextAlign.Center
             )
 
@@ -179,7 +181,7 @@ fun ReservaDetailRow(label: String, value: String) {
             .padding(vertical = 4.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = label, fontSize = 13.sp, color = Color.Gray)
-        Text(text = value, fontSize = 13.sp, fontWeight = FontWeight.Bold, color = Color.Black)
+        Text(text = label, fontSize = 14.sp, color = TextoSecundario)
+        Text(text = value, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Black)
     }
 }

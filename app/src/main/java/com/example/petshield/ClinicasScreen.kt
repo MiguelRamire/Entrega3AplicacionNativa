@@ -24,7 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.data.Clinica
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
+import com.example.petshield.ui.theme.TextoMedio
 
 @Composable
 fun ClinicasScreen(
@@ -81,8 +83,8 @@ fun ClinicasScreen(
                 ) {
                     Text(
                         text = "Filtrar",
-                        color = CelesteFin,
-                        fontSize = 13.sp,
+                        color = CelesteTexto,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
                     )
@@ -139,20 +141,20 @@ fun ClinicaCard(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = clinica.nombre,
-                fontSize = 15.sp,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
-                color = CelesteFin
+                color = CelesteTexto
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = "Dirección: ${clinica.direccion}",
-                fontSize = 11.sp,
-                color = Color.DarkGray
+                fontSize = 12.sp,
+                color = TextoMedio
             )
             Text(
                 text = "Horario: ${clinica.horario}",
-                fontSize = 11.sp,
-                color = Color.DarkGray
+                fontSize = 12.sp,
+                color = TextoMedio
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -161,9 +163,9 @@ fun ClinicaCard(
                 if (clinica.esRecomendada) {
                     Text(
                         text = "Recomendada",
-                        fontSize = 11.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
-                        color = CelesteFin
+                        color = CelesteTexto
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
