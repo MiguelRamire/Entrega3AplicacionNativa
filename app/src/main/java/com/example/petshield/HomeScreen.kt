@@ -20,9 +20,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
 import com.example.petshield.ui.theme.FondoClaro
 import com.example.petshield.ui.theme.PetShieldGradient
 import com.example.petshield.ui.theme.TextoOscuro
+import com.example.petshield.ui.theme.TextoSecundario
 
 @Composable
 fun HomeScreen(
@@ -44,7 +46,7 @@ fun HomeScreen(
             text = { Text("¡Tienes 2 recordatorios de vacunación y citas esta semana!") },
             confirmButton = {
                 TextButton(onClick = { showNotifDialog = false }) {
-                    Text("Entendido", color = CelesteFin)
+                    Text("Entendido", color = CelesteTexto)
                 }
             }
         )
@@ -115,7 +117,7 @@ fun HomeScreen(
                     text = "PetShield",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = CelesteFin
+                    color = CelesteTexto
                 )
 
                 Row(
@@ -124,7 +126,7 @@ fun HomeScreen(
                 ) {
                     Text(
                         text = viewModel.usuarioNombre,
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = TextoOscuro
                     )
@@ -173,9 +175,9 @@ fun HomeScreen(
             ) {
                 Text(
                     text = "Servicios",
-                    fontSize = 15.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = CelesteFin
+                    color = CelesteTexto
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 HorizontalDivider(color = FondoClaro, thickness = 1.dp)
@@ -219,7 +221,7 @@ fun HomeScreen(
                 Column {
                     Text(
                         text = "Citas Esta Semana",
-                        fontSize = 15.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
@@ -267,15 +269,15 @@ fun HomeScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Box(modifier = Modifier.size(6.dp).background(Color.White, CircleShape))
                                 Spacer(modifier = Modifier.width(6.dp))
-                                Text(text = "11 Mes - Miércoles - Hoy", color = Color.White, fontSize = 11.sp)
+                                Text(text = "11 Mes - Miércoles - Hoy", color = Color.White, fontSize = 12.sp)
                             }
                             Spacer(modifier = Modifier.height(2.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(text = "10:00 am", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                                Text(text = "Dra. Sofía Herrera, MV", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                Text(text = "10:00 am", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                Text(text = "Dra. Sofía Herrera, MV", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                             }
 
                             Spacer(modifier = Modifier.height(8.dp))
@@ -286,15 +288,15 @@ fun HomeScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Box(modifier = Modifier.size(6.dp).background(Color.White, CircleShape))
                                 Spacer(modifier = Modifier.width(6.dp))
-                                Text(text = "16 Mes - Lunes", color = Color.White, fontSize = 11.sp)
+                                Text(text = "16 Mes - Lunes", color = Color.White, fontSize = 12.sp)
                             }
                             Spacer(modifier = Modifier.height(2.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Text(text = "08:00 am", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                                Text(text = "Dr. Andrés Molina, MV", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                                Text(text = "08:00 am", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                                Text(text = "Dr. Andrés Molina, MV", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
                             }
                         }
                     }
@@ -312,9 +314,9 @@ fun HomeScreen(
             ) {
                 Text(
                     text = "Servicios Veterinarios proximos",
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = CelesteFin
+                    color = CelesteTexto
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -334,8 +336,8 @@ fun HomeScreen(
                         ) {
                             Text(
                                 text = day,
-                                color = if (active) Color.White else Color.Gray,
-                                fontSize = 10.sp,
+                                color = if (active) Color.White else TextoSecundario,
+                                fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -380,7 +382,7 @@ fun HomeScreen(
                                         ) {
                                             Text(
                                                 text = day,
-                                                fontSize = 11.sp,
+                                                fontSize = 12.sp,
                                                 fontWeight = if (isHighlighted) FontWeight.Bold else FontWeight.Normal,
                                                 color = if (isHighlighted) Color.White else TextoOscuro
                                             )
@@ -420,7 +422,7 @@ fun TopServiceItem(iconRes: Int, label: String, color: Color, onClick: () -> Uni
             )
         }
         Spacer(modifier = Modifier.height(4.dp))
-        Text(text = label, fontSize = 11.sp, color = color, fontWeight = FontWeight.Medium)
+        Text(text = label, fontSize = 12.sp, color = CelesteTexto, fontWeight = FontWeight.Medium)
     }
 }
 
@@ -444,14 +446,14 @@ fun DayBadge(
         ) {
             Text(
                 text = dayNum,
-                color = if (isSelected) CelesteFin else Color.White,
-                fontSize = 14.sp,
+                color = if (isSelected) CelesteTexto else Color.White,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
                 text = dayName,
-                color = if (isSelected) CelesteFin else Color.White.copy(alpha = 0.9f),
-                fontSize = 10.sp
+                color = if (isSelected) CelesteTexto else Color.White.copy(alpha = 0.9f),
+                fontSize = 12.sp
             )
         }
     }

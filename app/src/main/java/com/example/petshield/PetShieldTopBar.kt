@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.petshield.ui.theme.CelesteFin
 import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoPlaceholder
 
 @Composable
 fun PetShieldTopBar(
@@ -63,7 +64,7 @@ fun PetShieldTopBar(
                     Text(
                         text = subtitle,
                         color = Color.White.copy(alpha = 0.9f),
-                        fontSize = 12.sp,
+                        fontSize = 14.sp,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -100,7 +101,7 @@ fun PetShieldTopBar(
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = onSearchChange,
-                        placeholder = { Text("Buscar...", color = CelesteFin.copy(alpha = 0.6f), fontSize = 14.sp) },
+                        placeholder = { Text("Buscar...", color = TextoPlaceholder, fontSize = 16.sp) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         colors = TextFieldDefaults.colors(
