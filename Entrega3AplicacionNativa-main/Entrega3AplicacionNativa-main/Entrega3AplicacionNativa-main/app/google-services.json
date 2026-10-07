@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "890989965486",
+    "project_id": "petshield-c99ab",
+    "storage_bucket": "petshield-c99ab.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:890989965486:android:a85c3b1160d62b02f73d3f",
+        "android_client_info": {
+          "package_name": "com.example.petshield"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "890989965486-ah9in9i6prg9cm33l7pr3vbjgmesgtla.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7Kg6dGyH6T2NuBwoPMU1pW4GZiYXgAfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "890989965486-ah9in9i6prg9cm33l7pr3vbjgmesgtla.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
