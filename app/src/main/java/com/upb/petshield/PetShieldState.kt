@@ -81,6 +81,30 @@ class PetShieldViewModel(
             onResult(false, "Por favor ingresa tu correo y contraseña")
             return
         }
+
+        // Credenciales de prueba quemadas para iniciar sesión localmente sin Firebase
+        if (email.trim().equals("demo@upb.edu.co", ignoreCase = true) && pass == "123456") {
+            usuarioId = "usuario_demo"
+            usuarioNombre = "Ada Lovelace"
+            usuarioEmail = "demo@upb.edu.co"
+            usuarioTelefono = "+57 300 123 4567"
+            if (mascotas.isEmpty()) {
+                mascotas.add(
+                    Mascota(
+                        id = "m1",
+                        nombre = "Max",
+                        especie = "Perro",
+                        raza = "Golden Retriever",
+                        peso = "28.5 kg",
+                        fechaNacimiento = "12/05/2021",
+                        sexo = "Macho"
+                    )
+                )
+            }
+            onResult(true, null)
+            return
+        }
+
         viewModelScope.launch {
             val result = repository.iniciarSesion(email, pass)
             result.onSuccess {
