@@ -82,9 +82,9 @@ fun PetShieldTopBar(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(42.dp)
+                    .height(50.dp)
                     .padding(horizontal = 12.dp),
-                shape = RoundedCornerShape(21.dp),
+                shape = RoundedCornerShape(25.dp),
                 color = Color.White
             ) {
                 Row(
@@ -101,7 +101,8 @@ fun PetShieldTopBar(
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = onSearchChange,
-                        placeholder = { Text("Buscar...", color = TextoPlaceholder, fontSize = 16.sp) },
+                        placeholder = { Text("Buscar...", color = TextoPlaceholder, fontSize = 14.sp) },
+                        textStyle = LocalTextStyle.current.copy(fontSize = 14.sp),
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         colors = TextFieldDefaults.colors(
