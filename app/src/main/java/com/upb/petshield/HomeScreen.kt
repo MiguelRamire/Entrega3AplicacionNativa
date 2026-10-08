@@ -112,6 +112,7 @@ fun HomeScreen(
     // DIÁLOGO DE DETALLES DE CITAS AL PRESIONAR UNA FECHA DEL CALENDARIO
     diaSeleccionadoCalendar?.let { day ->
         val citasDelDia = viewModel.citas.filter { cita ->
+            if (!cita.esProxima) return@filter false
             val regex = Regex("""\b([1-9]|[12][0-9]|3[01])\b""")
             val diaEnCita = regex.find(cita.fechaStr)?.value
             diaEnCita == day
@@ -201,7 +202,7 @@ fun HomeScreen(
     }
 
     val diasConCitas = remember(viewModel.citas.toList()) {
-        viewModel.citas.mapNotNull { cita ->
+        viewModel.citas.filter { it.esProxima }.mapNotNull { cita ->
             val regex = Regex("""\b([1-9]|[12][0-9]|3[01])\b""")
             regex.find(cita.fechaStr)?.value
         }.toSet()
@@ -382,7 +383,7 @@ fun HomeScreen(
 
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    val primeraCita = viewModel.citas.firstOrNull()
+                    val primeraCita = viewModel.citas.firstOrNull { it.esProxima }
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()

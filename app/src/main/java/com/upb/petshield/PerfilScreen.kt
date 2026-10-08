@@ -1,5 +1,7 @@
 package com.upb.petshield
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,6 +46,7 @@ fun PerfilScreen(
     onLogout: () -> Unit,
     onNavigateToTab: (BottomTab) -> Unit
 ) {
+    val context = LocalContext.current
     val iniciales = viewModel.usuarioNombre
         .split(" ")
         .filter { it.isNotBlank() }
@@ -185,7 +189,14 @@ fun PerfilScreen(
                 PerfilMenuItem(
                     icon = Icons.Default.Lock,
                     title = "Política De Privacidad",
-                    onClick = { }
+                    onClick = {
+                        try {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://miguelramire.github.io/Entrega3AplicacionNativa/"))
+                            context.startActivity(intent)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
                 )
                 PerfilMenuItem(
                     icon = Icons.Default.Settings,

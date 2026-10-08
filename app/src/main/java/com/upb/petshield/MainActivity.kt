@@ -150,10 +150,18 @@ fun PetShieldApp(
         }
 
         is Screen.Register -> {
+            val context = LocalContext.current
             RegisterScreen(
                 viewModel = viewModel,
                 onBack = { popBack() },
-                onNavigateToLogin = { navigateTo(Screen.Login) }
+                onNavigateToLogin = { navigateTo(Screen.Login) },
+                onRegisterSuccess = {
+                    if (comprobarOnboardingCompletado(context)) {
+                        navigateAndClearTo(Screen.Home)
+                    } else {
+                        navigateAndClearTo(Screen.Onboarding)
+                    }
+                }
             )
         }
 

@@ -17,6 +17,7 @@ import com.upb.petshield.data.Mascota
 import com.upb.petshield.data.MascotaModel
 import com.upb.petshield.data.ServicioModel
 import com.upb.petshield.data.Veterinario
+import com.upb.petshield.data.VeterinarioModel
 import kotlinx.coroutines.launch
 
 class PetShieldViewModel(
@@ -284,9 +285,103 @@ class PetShieldViewModel(
     fun cargarVeterinariosDesdeFirebase() {
         viewModelScope.launch {
             val listaFirebase = repository.obtenerVeterinarios()
-            if (listaFirebase.isNotEmpty()) {
+            if (listaFirebase.size >= 5) {
                 veterinarios.clear()
                 listaFirebase.forEach { item ->
+                    veterinarios.add(
+                        Veterinario(
+                            id = item.id,
+                            clinicaId = item.clinicaId,
+                            nombre = item.nombre,
+                            especialidad = item.especialidad,
+                            clinicaTag = item.clinicaTag,
+                            esFavorito = item.esFavorito
+                        )
+                    )
+                }
+                cargarFavoritosDesdeFirebase()
+            } else {
+                sembrarVeterinariosEjemplo()
+            }
+        }
+    }
+
+    private fun sembrarVeterinariosEjemplo() {
+        viewModelScope.launch {
+            val ejemplos = listOf(
+                VeterinarioModel(
+                    nombre = "Dra. Ana María Jiménez, MV",
+                    especialidad = "Medicina Interna y Cardiología",
+                    clinicaTag = "Hospital Vet San Francisco",
+                    esFavorito = true
+                ),
+                VeterinarioModel(
+                    nombre = "Dr. Carlos Eduardo Mendoza, MVZ",
+                    especialidad = "Cirugía General y Traumatología",
+                    clinicaTag = "Centro Médico Mascotas & Co.",
+                    esFavorito = true
+                ),
+                VeterinarioModel(
+                    nombre = "Dra. Sofía Herrera, MV",
+                    especialidad = "Dermatología y Alergias",
+                    clinicaTag = "Movivet Clínica Veterinaria",
+                    esFavorito = true
+                ),
+                VeterinarioModel(
+                    nombre = "Dr. Alejandro Torres, MV",
+                    especialidad = "Odontología y Profilaxis",
+                    clinicaTag = "VetLife Especializada",
+                    esFavorito = false
+                ),
+                VeterinarioModel(
+                    nombre = "Dra. Valentina Ríos, MV",
+                    especialidad = "Pediatría y Neonatología",
+                    clinicaTag = "Hospital Vet San Francisco",
+                    esFavorito = true
+                ),
+                VeterinarioModel(
+                    nombre = "Dr. Mateo Restrepo, MVZ",
+                    especialidad = "Neurología y Fisioterapia",
+                    clinicaTag = "Centro Médico Mascotas & Co.",
+                    esFavorito = false
+                ),
+                VeterinarioModel(
+                    nombre = "Dra. Camila Gómez, MV",
+                    especialidad = "Medicina Felina y Etología",
+                    clinicaTag = "Movivet Clínica Veterinaria",
+                    esFavorito = true
+                ),
+                VeterinarioModel(
+                    nombre = "Dr. Esteban Morales, MV",
+                    especialidad = "Urgencias y Cuidado Crítico 24/7",
+                    clinicaTag = "VetLife Especializada",
+                    esFavorito = false
+                )
+            )
+
+            // Cargar localmente de inmediato para actualizar la interfaz
+            veterinarios.clear()
+            ejemplos.forEachIndexed { index, model ->
+                veterinarios.add(
+                    Veterinario(
+                        id = "vet_seeded_$index",
+                        nombre = model.nombre,
+                        especialidad = model.especialidad,
+                        clinicaTag = model.clinicaTag,
+                        esFavorito = model.esFavorito
+                    )
+                )
+            }
+
+            // Guardar en Firestore
+            ejemplos.forEach { model ->
+                repository.agregarVeterinario(model)
+            }
+
+            val listaActualizada = repository.obtenerVeterinarios()
+            if (listaActualizada.isNotEmpty()) {
+                veterinarios.clear()
+                listaActualizada.forEach { item ->
                     veterinarios.add(
                         Veterinario(
                             id = item.id,
@@ -308,7 +403,7 @@ class PetShieldViewModel(
             val lista = repository.obtenerServicios()
             if (lista.isNotEmpty()) {
                 servicios.clear()
-                servicios.addAll(lista)
+                servicios.addAll(lista.distinctBy { it.nombre.trim().lowercase() })
             } else {
                 sembrarServiciosEjemplo()
             }
@@ -352,7 +447,7 @@ class PetShieldViewModel(
             ejemplos.forEach { s -> repository.agregarServicio(s) }
             val listaActualizada = repository.obtenerServicios()
             servicios.clear()
-            servicios.addAll(listaActualizada.ifEmpty { ejemplos })
+            servicios.addAll(listaActualizada.distinctBy { it.nombre.trim().lowercase() }.ifEmpty { ejemplos })
         }
     }
 

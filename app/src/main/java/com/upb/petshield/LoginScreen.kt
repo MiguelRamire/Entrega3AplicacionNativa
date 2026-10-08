@@ -46,8 +46,8 @@ fun LoginScreen(
     onLoginSuccess: () -> Unit
 ) {
     val context = LocalContext.current
-    var email by remember { mutableStateOf("demo@upb.edu.co") }
-    var password by remember { mutableStateOf("123456") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var cargando by remember { mutableStateOf(false) }

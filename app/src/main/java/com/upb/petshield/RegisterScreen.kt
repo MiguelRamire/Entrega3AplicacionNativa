@@ -1,5 +1,7 @@
 package com.upb.petshield
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +18,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -37,8 +40,10 @@ import com.upb.petshield.ui.theme.TextoSecundario
 fun RegisterScreen(
     viewModel: PetShieldViewModel,
     onBack: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    onRegisterSuccess: () -> Unit
 ) {
+    val context = LocalContext.current
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -213,8 +218,16 @@ fun RegisterScreen(
             Text(
                 text = "Al continuar, aceptas los\nTérminos de Uso y Política de Privacidad.",
                 fontSize = 12.sp,
-                color = TextoSecundario,
-                textAlign = TextAlign.Center
+                color = CelesteTexto,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.clickable {
+                    try {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://miguelramire.github.io/Entrega3AplicacionNativa/"))
+                        context.startActivity(intent)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -236,7 +249,7 @@ fun RegisterScreen(
                     viewModel.registrarUsuario(email, password, name, phone) { exito, errorMsg ->
                         cargando = false
                         if (exito) {
-                            onNavigateToLogin()
+                            onRegisterSuccess()
                         } else {
                             errorMessage = errorMsg ?: "Error al registrar el usuario"
                         }

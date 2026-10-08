@@ -142,28 +142,78 @@ fun FaqScreen(
                     }
                 }
             } else {
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    color = FondoClaro
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Column(
-                        modifier = Modifier.padding(20.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        color = FondoClaro
                     ) {
-                        Text(
-                            text = "¿Tienes alguna duda directa?",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = CelesteTexto
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = "Envíanos un mensaje o llámanos a nuestra línea de atención telefónica:\n\n📞 +1 800 PET SHIELD\n✉️ soporte@petshield.com",
-                            fontSize = 14.sp,
-                            color = TextoMedio,
-                            textAlign = TextAlign.Center
-                        )
+                        Column(
+                            modifier = Modifier.padding(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "¿Tienes alguna duda directa?",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = CelesteTexto
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Envíanos un mensaje o llámanos a nuestra línea de atención telefónica:\n\n📞 +1 800 PET SHIELD\n✉️ soporte@petshield.com",
+                                fontSize = 14.sp,
+                                color = TextoMedio,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(16.dp),
+                        color = Color.White,
+                        border = BorderStroke(1.dp, FondoClaro)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(20.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Desarrolladores & Créditos",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = CelesteTexto
+                            )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                text = "Aplicación creada y diseñada por:",
+                                fontSize = 12.sp,
+                                color = TextoMedio,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            HorizontalDivider(color = FondoClaro)
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            Text(
+                                text = "👨‍💻 Miguel Ángel Ramírez\n👨‍💻 Juan David Parra\n👨‍💻 Hugo Hernández",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.Black,
+                                lineHeight = 26.sp,
+                                textAlign = TextAlign.Center
+                            )
+
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = "PetShield App v1.1",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = CelesteFin
+                            )
+                        }
                     }
                 }
             }

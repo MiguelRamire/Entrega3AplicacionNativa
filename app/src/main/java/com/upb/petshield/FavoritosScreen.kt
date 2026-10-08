@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -33,19 +32,18 @@ import com.upb.petshield.ui.theme.TextoSecundario
 fun FavoritosScreen(
     viewModel: PetShieldViewModel,
     onBack: () -> Unit,
-    onAgendarCita: (Veterinario) -> Unit,
+    onAgendarCita: (Veterinario) -> Unit = {},
     onSelectClinica: (Clinica) -> Unit = {},
     onNavigateToClinicas: () -> Unit = {},
     onNavigateToTab: (BottomTab) -> Unit
 ) {
     val favoritosClinicas = viewModel.clinicas.filter { it.esFavorita }
-    val favoritosVets = viewModel.veterinarios.filter { it.esFavorito }
-    val totalFavoritos = favoritosClinicas.size + favoritosVets.size
+    val totalFavoritos = favoritosClinicas.size
 
     Scaffold(
         topBar = {
             PetShieldTopBar(
-                title = "Favoritos",
+                title = "Clínicas Favoritas",
                 onBack = onBack,
                 onLogoClick = { onNavigateToTab(BottomTab.HOME) }
             )
@@ -85,7 +83,7 @@ fun FavoritosScreen(
                 Spacer(modifier = Modifier.height(32.dp))
 
                 Text(
-                    text = "Aún no tienes favoritos",
+                    text = "Aún no tienes clínicas favoritas",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = CelesteTexto,
@@ -96,7 +94,7 @@ fun FavoritosScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = "Explora las clínicas y veterinarios registrados para agregarlos a tu lista de favoritos.",
+                    text = "Explora las clínicas registradas para agregarlas a tu lista de favoritos.",
                     fontSize = 14.sp,
                     color = TextoSecundario,
                     textAlign = TextAlign.Center,
@@ -119,7 +117,7 @@ fun FavoritosScreen(
                     contentPadding = PaddingValues()
                 ) {
                     Text(
-                        text = "Ver clínicas y veterinarios",
+                        text = "Ver clínicas",
                         color = Color.White,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
@@ -169,49 +167,23 @@ fun FavoritosScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = PaddingValues(bottom = 16.dp)
                 ) {
-                    if (favoritosClinicas.isNotEmpty()) {
-                        item {
-                            Text(
-                                text = "Clínicas Favoritas",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = CelesteTexto,
-                                modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
-                            )
-                        }
-                        items(favoritosClinicas, key = { "clinica_${it.id}" }) { clinica ->
-                            ClinicaCard(
-                                clinica = clinica,
-                                onToggleFavorite = { viewModel.toggleFavoritoClinica(clinica.id) },
-                                onClick = { onSelectClinica(clinica) }
-                            )
-                            HorizontalDivider(color = FondoClaro, thickness = 1.dp)
-                        }
+                    item {
+                        Text(
+                            text = "Clínicas Favoritas",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = CelesteTexto,
+                            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp)
+                        )
                     }
 
-                    if (favoritosVets.isNotEmpty()) {
-                        item {
-                            Text(
-                                text = "Veterinarios Favoritos",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = CelesteTexto,
-                                modifier = Modifier.padding(top = 8.dp, bottom = 4.dp)
-                            )
-                        }
-                        items(favoritosVets, key = { "vet_${it.id}" }) { vet ->
-                            VetCard(
-                                vet = vet,
-                                onToggleFavorite = { viewModel.toggleFavoritoVet(vet.id) },
-                                onAgendar = {
-                                    viewModel.reservaActual = viewModel.reservaActual.copy(
-                                        profesionalNombre = vet.nombre
-                                    )
-                                    onAgendarCita(vet)
-                                }
-                            )
-                            HorizontalDivider(color = FondoClaro, thickness = 1.dp)
-                        }
+                    items(favoritosClinicas, key = { "clinica_${it.id}" }) { clinica ->
+                        ClinicaCard(
+                            clinica = clinica,
+                            onToggleFavorite = { viewModel.toggleFavoritoClinica(clinica.id) },
+                            onClick = { onSelectClinica(clinica) }
+                        )
+                        HorizontalDivider(color = FondoClaro, thickness = 1.dp)
                     }
 
                     item {
@@ -238,96 +210,6 @@ fun FavoritosScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun VetCard(
-    vet: Veterinario,
-    onToggleFavorite: () -> Unit,
-    onAgendar: () -> Unit
-) {
-    val iniciales = remember(vet.nombre) { obtenerInicialesVet(vet.nombre) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(56.dp)
-                .clip(CircleShape)
-                .background(CelesteTexto),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = iniciales,
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(16.dp)
-                        .clip(CircleShape)
-                        .background(CelesteFin),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "🎖️", fontSize = 12.sp)
-                }
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = vet.clinicaTag,
-                    fontSize = 12.sp,
-                    color = TextoMedio
-                )
-            }
-
-            Text(
-                text = vet.nombre,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color = CelesteTexto
-            )
-            Text(
-                text = vet.especialidad,
-                fontSize = 14.sp,
-                color = TextoSecundario
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(
-                onClick = onAgendar,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(36.dp)
-                    .background(
-                        brush = PetShieldGradient,
-                        shape = RoundedCornerShape(18.dp)
-                    ),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-                contentPadding = PaddingValues()
-            ) {
-                Text(text = "Agendar Cita", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-            }
-        }
-
-        IconButton(onClick = onToggleFavorite) {
-            Icon(
-                imageVector = if (vet.esFavorito) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder,
-                contentDescription = "Favorito",
-                tint = CelesteFin
-            )
         }
     }
 }

@@ -268,6 +268,13 @@ class FirebaseRepository(
             .addOnFailureListener { onResult(emptyList()) }
     }
 
+    suspend fun agregarVeterinario(veterinario: VeterinarioModel): Result<Unit> = runCatching {
+        val docRef = db.collection("veterinarios").document()
+        val nuevoVet = veterinario.copy(id = docRef.id)
+        docRef.set(nuevoVet).await()
+        Unit
+    }
+
     suspend fun obtenerServicios(): List<ServicioModel> = runCatching {
         val snapshot = db.collection("servicios").get().await()
         snapshot.toObjects(ServicioModel::class.java)
