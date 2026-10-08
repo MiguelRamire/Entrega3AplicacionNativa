@@ -1,5 +1,6 @@
 package com.example.petshield
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,6 +22,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.petshield.data.Clinica
+import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
+import com.example.petshield.ui.theme.FondoClaro
+import com.example.petshield.ui.theme.TextoMedio
 
 @Composable
 fun ClinicasScreen(
@@ -31,6 +37,11 @@ fun ClinicasScreen(
 ) {
     var searchQuery by remember { mutableStateOf("") }
 
+    LaunchedEffect(Unit) {
+        viewModel.cargarClinicasDesdeFirebase()
+    }
+
+    val filteredClinicas = viewModel.clinicas.filter {
         it.nombre.contains(searchQuery, ignoreCase = true) ||
                 it.direccion.contains(searchQuery, ignoreCase = true)
     }
@@ -41,7 +52,9 @@ fun ClinicasScreen(
                 title = "Clínicas\nVeterinarias",
                 subtitle = "Busca tu Clínica\nVeterinaria",
                 onBack = onBack,
+                onLogoClick = { onNavigateToTab(BottomTab.HOME) },
                 searchQuery = searchQuery,
+                onSearchChange = { searchQuery = it }
             )
         },
         bottomBar = {
@@ -67,11 +80,14 @@ fun ClinicasScreen(
             ) {
                 Surface(
                     shape = RoundedCornerShape(16.dp),
+                    border = BorderStroke(1.dp, CelesteFin),
                     color = Color.White,
                     modifier = Modifier.clickable { }
                 ) {
                     Text(
                         text = "Filtrar",
+                        color = CelesteTexto,
+                        fontSize = 14.sp,
                         fontWeight = FontWeight.Medium,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
                     )
@@ -82,11 +98,13 @@ fun ClinicasScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = PaddingValues(bottom = 16.dp)
             ) {
+                items(filteredClinicas, key = { it.id }) { clinica ->
                     ClinicaCard(
                         clinica = clinica,
                         onToggleFavorite = { viewModel.toggleFavoritoClinica(clinica.id) },
                         onClick = { onSelectClinica(clinica) }
                     )
+                    HorizontalDivider(color = FondoClaro, thickness = 1.dp)
                 }
             }
         }
@@ -110,11 +128,13 @@ fun ClinicaCard(
             modifier = Modifier
                 .size(70.dp)
                 .clip(CircleShape)
+                .background(FondoClaro),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_clinics),
                 contentDescription = null,
+                tint = CelesteFin,
                 modifier = Modifier.size(36.dp)
             )
         }
@@ -124,14 +144,20 @@ fun ClinicaCard(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = clinica.nombre,
+                fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
+                color = CelesteTexto
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = "Dirección: ${clinica.direccion}",
+                fontSize = 12.sp,
+                color = TextoMedio
             )
             Text(
                 text = "Horario: ${clinica.horario}",
+                fontSize = 12.sp,
+                color = TextoMedio
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -140,7 +166,9 @@ fun ClinicaCard(
                 if (clinica.esRecomendada) {
                     Text(
                         text = "Recomendada",
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
+                        color = CelesteTexto
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
@@ -148,6 +176,7 @@ fun ClinicaCard(
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = null,
+                        tint = CelesteFin,
                         modifier = Modifier.size(12.dp)
                     )
                 }
@@ -158,6 +187,7 @@ fun ClinicaCard(
             Icon(
                 imageVector = if (clinica.esFavorita) Icons.Default.Favorite else Icons.Outlined.FavoriteBorder,
                 contentDescription = "Favorito",
+                tint = CelesteFin
             )
         }
     }

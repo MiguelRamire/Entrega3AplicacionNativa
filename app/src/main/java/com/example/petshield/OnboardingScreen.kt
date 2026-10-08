@@ -1,3 +1,5 @@
+package com.example.petshield
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,6 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.petshield.ui.theme.CelesteTexto
+import com.example.petshield.ui.theme.FondoClaro
+import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoSecundario
 import kotlinx.coroutines.launch
 
 data class OnboardingPage(
@@ -37,7 +43,9 @@ fun OnboardingScreen(
 
     val pages = listOf(
         OnboardingPage(
+            imageRes = R.drawable.a_onboardin,
             title = "Gestiona Tus\nMascotas",
+            description = "PetShield te ayuda a guardar toda la información médica de tus mascotas en un solo lugar."
         ),
         OnboardingPage(
             imageRes = R.drawable.b_onboardin,
@@ -71,11 +79,15 @@ fun OnboardingScreen(
                 ) {
                     Text(
                         text = "Omitir",
+                        color = CelesteTexto,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = ">",
+                        color = CelesteTexto,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold
                     )
                 }
@@ -111,6 +123,7 @@ fun OnboardingScreen(
                     text = item.title,
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
+                    color = CelesteTexto,
                     textAlign = TextAlign.Center,
                     lineHeight = 28.sp
                 )
@@ -119,7 +132,10 @@ fun OnboardingScreen(
 
                 Text(
                     text = item.description,
+                    fontSize = 14.sp,
+                    color = TextoSecundario,
                     textAlign = TextAlign.Center,
+                    lineHeight = 22.sp,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
             }
@@ -139,6 +155,7 @@ fun OnboardingScreen(
                         .padding(4.dp)
                         .size(if (isSelected) 10.dp else 8.dp)
                         .background(
+                            brush = if (isSelected) PetShieldGradient else Brush.linearGradient(listOf(FondoClaro, FondoClaro)),
                             shape = CircleShape
                         )
                 )
@@ -166,6 +183,7 @@ fun OnboardingScreen(
                     .fillMaxWidth()
                     .height(50.dp)
                     .background(
+                        brush = PetShieldGradient,
                         shape = RoundedCornerShape(25.dp)
                     ),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),

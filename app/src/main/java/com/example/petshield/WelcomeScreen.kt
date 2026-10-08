@@ -1,3 +1,5 @@
+package com.example.petshield
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,6 +16,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.petshield.ui.theme.CelesteTexto
+import com.example.petshield.ui.theme.FondoClaro
+import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
 
 @Composable
 fun WelcomeScreen(
@@ -24,6 +30,7 @@ fun WelcomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
+            .padding(horizontal = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -39,13 +46,17 @@ fun WelcomeScreen(
             text = "PetShield",
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
+            color = CelesteTexto
         )
 
         Spacer(modifier = Modifier.height(40.dp))
 
         Text(
             text = "PetShield te ayuda a mantener al día la salud de tu mascota con un seguimiento completo de vacunas, desparasitaciones y citas veterinarias.",
+            fontSize = 16.sp,
+            color = TextoMedio,
             textAlign = TextAlign.Center,
+            lineHeight = 24.sp
         )
 
         Spacer(modifier = Modifier.height(48.dp))
@@ -56,6 +67,7 @@ fun WelcomeScreen(
                 .fillMaxWidth()
                 .height(50.dp)
                 .background(
+                    brush = PetShieldGradient,
                     shape = RoundedCornerShape(25.dp)
                 ),
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -71,8 +83,10 @@ fun WelcomeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = FondoClaro),
             shape = RoundedCornerShape(25.dp)
         ) {
+            Text(text = "Registrarse", color = CelesteTexto, fontSize = 16.sp, fontWeight = FontWeight.Bold)
         }
     }
 }

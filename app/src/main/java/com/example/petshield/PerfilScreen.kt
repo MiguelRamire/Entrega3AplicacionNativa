@@ -29,6 +29,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
+import com.example.petshield.ui.theme.FondoClaro
+import com.example.petshield.ui.theme.PetShieldGradient
 
 @Composable
 fun PerfilScreen(
@@ -39,6 +43,13 @@ fun PerfilScreen(
     onLogout: () -> Unit,
     onNavigateToTab: (BottomTab) -> Unit
 ) {
+    val iniciales = viewModel.usuarioNombre
+        .split(" ")
+        .filter { it.isNotBlank() }
+        .take(2)
+        .mapNotNull { it.firstOrNull()?.uppercaseChar() }
+        .joinToString("")
+        .ifEmpty { "U" }
 
     Scaffold(
         bottomBar = {
@@ -58,6 +69,7 @@ fun PerfilScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .background(PetShieldGradient)
                     .padding(top = 28.dp, bottom = 24.dp, start = 16.dp, end = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -81,11 +93,13 @@ fun PerfilScreen(
                         fontWeight = FontWeight.Bold
                     )
 
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_logo_blanco),
-                        contentDescription = "Logo",
-                        modifier = Modifier.size(32.dp)
-                    )
+                    IconButton(onClick = { onNavigateToTab(BottomTab.HOME) }) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_logo_blanco),
+                            contentDescription = "Logo PetShield",
+                            modifier = Modifier.size(32.dp)
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -102,8 +116,15 @@ fun PerfilScreen(
                             modifier = Modifier
                                 .size(86.dp)
                                 .clip(CircleShape)
+                                .background(CelesteTexto),
                             contentAlignment = Alignment.Center
                         ) {
+                            Text(
+                                text = iniciales,
+                                color = Color.White,
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
 
                         Box(
@@ -111,12 +132,14 @@ fun PerfilScreen(
                                 .size(28.dp)
                                 .clip(CircleShape)
                                 .background(Color.White)
+                                .border(1.dp, CelesteFin, CircleShape)
                                 .clickable { },
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Edit,
                                 contentDescription = "Editar",
+                                tint = CelesteFin,
                                 modifier = Modifier.size(16.dp)
                             )
                         }
@@ -135,10 +158,12 @@ fun PerfilScreen(
                         Text(
                             text = viewModel.usuarioTelefono,
                             color = Color.White.copy(alpha = 0.9f),
+                            fontSize = 14.sp
                         )
                         Text(
                             text = viewModel.usuarioEmail,
                             color = Color.White.copy(alpha = 0.9f),
+                            fontSize = 14.sp
                         )
                     }
                 }
@@ -206,6 +231,7 @@ fun PerfilMenuItem(
             modifier = Modifier
                 .size(46.dp)
                 .clip(CircleShape)
+                .background(CelesteFin),
             contentAlignment = Alignment.Center
         ) {
             Icon(
@@ -230,6 +256,7 @@ fun PerfilMenuItem(
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
+                tint = CelesteFin
             )
         }
     }

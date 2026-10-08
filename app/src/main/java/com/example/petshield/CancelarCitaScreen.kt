@@ -14,6 +14,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
+import com.example.petshield.ui.theme.FondoClaro
+import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
+import com.example.petshield.ui.theme.TextoSecundario
 
 @Composable
 fun CancelarCitaScreen(
@@ -24,11 +30,14 @@ fun CancelarCitaScreen(
 ) {
     val cita = viewModel.citaACancelar
 
-        "Reprogramación",
-        "Condiciones Climáticas",
-        "Imprevisto Laboral",
-        "Otros"
-    )
+    val opcionesMotivo = remember {
+        listOf(
+            "Reprogramación",
+            "Condiciones Climáticas",
+            "Imprevisto Laboral",
+            "Otros"
+        )
+    }
     var motivoSeleccionado by remember { mutableStateOf(opcionesMotivo[0]) }
     var detalleTexto by remember { mutableStateOf("") }
 
@@ -36,6 +45,8 @@ fun CancelarCitaScreen(
         topBar = {
             PetShieldTopBar(
                 title = "Cancelar Cita",
+                onBack = onBack,
+                onLogoClick = { onNavigateToTab(BottomTab.HOME) }
             )
         },
         bottomBar = {
@@ -55,6 +66,9 @@ fun CancelarCitaScreen(
         ) {
             Text(
                 text = "Consulta de vacunación programada. Se realizará la evaluación general de la mascota y se aplicarán las vacunas correspondientes según el calendario de inmunización.",
+                fontSize = 14.sp,
+                color = TextoMedio,
+                lineHeight = 20.sp
             )
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -70,10 +84,12 @@ fun CancelarCitaScreen(
                     RadioButton(
                         selected = (motivoSeleccionado == opcion),
                         onClick = { motivoSeleccionado = opcion },
+                        colors = RadioButtonDefaults.colors(selectedColor = CelesteFin)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = opcion,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.Black
                     )
@@ -83,6 +99,10 @@ fun CancelarCitaScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
+                text = "Por favor indícanos si deseas detallar la razón de la cancelación.",
+                fontSize = 14.sp,
+                color = CelesteTexto,
+                lineHeight = 20.sp
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -90,11 +110,14 @@ fun CancelarCitaScreen(
             OutlinedTextField(
                 value = detalleTexto,
                 onValueChange = { detalleTexto = it },
+                placeholder = { Text("Escribe Tu Motivo Aquí...", color = TextoSecundario, fontSize = 14.sp) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(140.dp),
                 shape = RoundedCornerShape(16.dp),
                 colors = TextFieldDefaults.colors(
+                    focusedContainerColor = FondoClaro,
+                    unfocusedContainerColor = FondoClaro,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
                     focusedTextColor = Color.Black,
@@ -115,6 +138,7 @@ fun CancelarCitaScreen(
                     .fillMaxWidth()
                     .height(50.dp)
                     .background(
+                        brush = PetShieldGradient,
                         shape = RoundedCornerShape(25.dp)
                     ),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),

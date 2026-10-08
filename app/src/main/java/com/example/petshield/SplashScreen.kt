@@ -13,15 +13,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.petshield.ui.theme.PetShieldGradient
 import kotlinx.coroutines.delay
 
 @Composable
+fun SplashScreen(onNavigate: () -> Unit) {
     LaunchedEffect(key1 = true) {
+        delay(2000L)
+        onNavigate()
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .background(PetShieldGradient),
         contentAlignment = Alignment.Center
     ) {
         Column(

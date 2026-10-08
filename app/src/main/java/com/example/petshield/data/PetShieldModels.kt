@@ -2,6 +2,72 @@ package com.example.petshield.data
 
 import com.google.firebase.firestore.DocumentId
 
+// ==========================================
+// MODELOS DE INTERFAZ DE USUARIO (UI)
+// ==========================================
+
+data class Mascota(
+    val id: String,
+    val nombre: String,
+    val especie: String,
+    val raza: String,
+    val peso: String,
+    val fechaNacimiento: String,
+    val sexo: String,
+    val vacunas: List<String> = listOf("Rabia (Completada)", "Triple Viral (Completada)", "Refuerzo Anual (Pendiente)")
+)
+
+data class Clinica(
+    val id: String,
+    val nombre: String,
+    val direccion: String,
+    val horario: String,
+    val calificacion: Float = 4.9f,
+    val esRecomendada: Boolean = true,
+    var esFavorita: Boolean = true
+)
+
+data class Veterinario(
+    val id: String,
+    val clinicaId: String = "",
+    val nombre: String,
+    val especialidad: String,
+    val clinicaTag: String,
+    var esFavorito: Boolean = true
+)
+
+data class Cita(
+    val id: String,
+    val vetNombre: String,
+    val servicio: String,
+    val fechaStr: String,
+    val horaStr: String,
+    val esProxima: Boolean = true,
+    val mascotaNombre: String = "Max",
+    val modalidad: String = "En clínica",
+    val lugar: String = "Clínica PetCare · Poblado"
+)
+
+data class DatosReserva(
+    val clinicaId: String = "",
+    val servicioId: String = "",
+    val mascotaId: String = "",
+    val mascotaNombre: String = "Max · Golden Retriever",
+    val servicioNombre: String = "Consulta veterinaria general",
+    val profesionalNombre: String = "Dra. Ana Jiménez, MV",
+    val fechaStr: String = "Miércoles, 23 de septiembre",
+    val horaStr: String = "3:00 PM",
+    val modalidad: String = "En clínica",
+    val lugar: String = "PetCare Clínica Veterinaria",
+    val precioConsulta: String = "$65.000",
+    val tarifaServicio: String = "$3.500",
+    val total: String = "$68.500"
+)
+
+// ==========================================
+// MODELOS FIRESTORE
+// ==========================================
+
 /**
  * Modelo para la colección "usuarios" en Firestore.
  */
@@ -91,11 +157,13 @@ data class CitaModel(
     val nombreMascota: String = "",
     val clinicaId: String = "",
     val nombreClinica: String = "",
+    val vetNombre: String = "",
     val servicioId: String = "",
     val nombreServicio: String = "",
     val fecha: String = "",
     val hora: String = "",
     val precio: Double = 0.0,
+    val estado: String = "Pendiente",
     val motivoCancelacion: String = "",
     val fechaCreacion: Long = System.currentTimeMillis()
 )
@@ -107,6 +175,8 @@ data class FavoritoModel(
     @DocumentId val id: String = "",
     val usuarioId: String = "",
     val clinicaId: String = "",
+    val vetId: String = "",
+    val tipo: String = "clinica",
     val fechaAgregado: Long = System.currentTimeMillis()
 )
 

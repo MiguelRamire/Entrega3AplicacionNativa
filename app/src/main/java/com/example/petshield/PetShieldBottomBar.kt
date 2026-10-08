@@ -15,6 +15,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.FondoClaro
 
 enum class BottomTab {
     PROFILE, HOME, CITAS
@@ -29,8 +31,11 @@ fun PetShieldBottomBar(
     Surface(
         modifier = modifier
             .fillMaxWidth()
+            .navigationBarsPadding()
             .padding(horizontal = 16.dp)
+            .padding(bottom = 8.dp)
             .height(60.dp),
+        color = FondoClaro,
         shape = RoundedCornerShape(28.dp)
     ) {
         Row(
@@ -46,6 +51,7 @@ fun PetShieldBottomBar(
                     modifier = Modifier
                         .size(42.dp)
                         .clip(CircleShape)
+                        .background(CelesteFin)
                         .clickable { onNavigateToTab(BottomTab.PROFILE) },
                     contentAlignment = Alignment.Center
                 ) {
@@ -61,6 +67,7 @@ fun PetShieldBottomBar(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_profile_user),
                         contentDescription = "Perfil",
+                        tint = CelesteFin,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -72,6 +79,7 @@ fun PetShieldBottomBar(
                     modifier = Modifier
                         .size(42.dp)
                         .clip(CircleShape)
+                        .background(CelesteFin)
                         .clickable { onNavigateToTab(BottomTab.HOME) },
                     contentAlignment = Alignment.Center
                 ) {
@@ -87,6 +95,7 @@ fun PetShieldBottomBar(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_home_active),
                         contentDescription = "Home",
+                        tint = CelesteFin,
                         modifier = Modifier.size(22.dp)
                     )
                 }
@@ -98,6 +107,7 @@ fun PetShieldBottomBar(
                     modifier = Modifier
                         .size(42.dp)
                         .clip(CircleShape)
+                        .background(CelesteFin)
                         .clickable { onNavigateToTab(BottomTab.CITAS) },
                     contentAlignment = Alignment.Center
                 ) {
@@ -113,6 +123,7 @@ fun PetShieldBottomBar(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_calendar_nav),
                         contentDescription = "Calendario",
+                        tint = CelesteFin,
                         modifier = Modifier.size(22.dp)
                     )
                 }

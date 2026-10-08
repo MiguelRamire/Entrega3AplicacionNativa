@@ -21,6 +21,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.petshield.data.Mascota
+import com.example.petshield.ui.theme.CelesteFin
+import com.example.petshield.ui.theme.CelesteTexto
+import com.example.petshield.ui.theme.FondoClaro
+import com.example.petshield.ui.theme.PetShieldGradient
+import com.example.petshield.ui.theme.TextoMedio
 
 @Composable
 fun CarnetVacunasScreen(
@@ -35,6 +41,8 @@ fun CarnetVacunasScreen(
         topBar = {
             PetShieldTopBar(
                 title = "Carnet De Vacunas",
+                onBack = onBack,
+                onLogoClick = { onNavigateToTab(BottomTab.HOME) }
             )
         },
         bottomBar = {
@@ -58,11 +66,13 @@ fun CarnetVacunasScreen(
                     modifier = Modifier
                         .size(140.dp)
                         .clip(CircleShape)
+                        .background(FondoClaro),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_carnet),
                         contentDescription = "Carnet Vacío",
+                        tint = CelesteFin,
                         modifier = Modifier.size(70.dp)
                     )
                 }
@@ -73,6 +83,7 @@ fun CarnetVacunasScreen(
                     text = "Aún No Has\nRegistrado Datos\nDe Tu Mascota",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
+                    color = CelesteTexto,
                     textAlign = TextAlign.Center,
                     lineHeight = 28.sp
                 )
@@ -85,6 +96,7 @@ fun CarnetVacunasScreen(
                         .fillMaxWidth(0.8f)
                         .height(50.dp)
                         .background(
+                            brush = PetShieldGradient,
                             shape = RoundedCornerShape(25.dp)
                         ),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -109,13 +121,16 @@ fun CarnetVacunasScreen(
                         text = "Mascotas Registradas",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
+                        color = CelesteTexto
                     )
 
                     Button(
                         onClick = onAgregarMascota,
+                        colors = ButtonDefaults.buttonColors(containerColor = FondoClaro),
                         shape = RoundedCornerShape(16.dp),
                         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
                     ) {
+                        Text(text = "+ Agregar otra", color = CelesteTexto, fontSize = 14.sp, fontWeight = FontWeight.Bold)
                     }
                 }
 
@@ -125,6 +140,7 @@ fun CarnetVacunasScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     contentPadding = PaddingValues(bottom = 16.dp)
                 ) {
+                    items(mascotas, key = { it.id }) { mascota ->
                         MascotaCarnetCard(mascota = mascota)
                     }
                 }
@@ -139,6 +155,7 @@ fun MascotaCarnetCard(mascota: Mascota) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
         color = Color.White,
+        border = BorderStroke(1.dp, CelesteFin)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -146,11 +163,13 @@ fun MascotaCarnetCard(mascota: Mascota) {
                     modifier = Modifier
                         .size(48.dp)
                         .clip(CircleShape)
+                        .background(FondoClaro),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Pets,
                         contentDescription = null,
+                        tint = CelesteFin,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -162,18 +181,23 @@ fun MascotaCarnetCard(mascota: Mascota) {
                         text = mascota.nombre,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
+                        color = CelesteTexto
                     )
                     Text(
                         text = "${mascota.especie} • ${mascota.raza} (${mascota.peso})",
+                        fontSize = 14.sp,
+                        color = TextoMedio
                     )
                 }
             }
 
             Spacer(modifier = Modifier.height(12.dp))
+            HorizontalDivider(color = FondoClaro)
             Spacer(modifier = Modifier.height(12.dp))
 
             Text(
                 text = "Registro de Vacunación",
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.Black
             )
@@ -187,9 +211,11 @@ fun MascotaCarnetCard(mascota: Mascota) {
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
                         contentDescription = null,
+                        tint = CelesteFin,
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = vacuna, fontSize = 14.sp, color = TextoMedio)
                 }
             }
         }
