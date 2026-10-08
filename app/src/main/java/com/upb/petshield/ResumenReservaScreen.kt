@@ -1,4 +1,4 @@
-package com.example.petshield
+package com.upb.petshield
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -21,14 +21,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.petshield.data.Mascota
-import com.example.petshield.data.Veterinario
-import com.example.petshield.ui.theme.CelesteFin
-import com.example.petshield.ui.theme.CelesteTexto
-import com.example.petshield.ui.theme.FondoClaro
-import com.example.petshield.ui.theme.PetShieldGradient
-import com.example.petshield.ui.theme.TextoMedio
-import com.example.petshield.ui.theme.TextoSecundario
+import com.upb.petshield.data.Mascota
+import com.upb.petshield.data.Veterinario
+import com.upb.petshield.ui.theme.CelesteFin
+import com.upb.petshield.ui.theme.CelesteTexto
+import com.upb.petshield.ui.theme.FondoClaro
+import com.upb.petshield.ui.theme.PetShieldGradient
+import com.upb.petshield.ui.theme.TextoMedio
+import com.upb.petshield.ui.theme.TextoSecundario
 
 @Composable
 fun ResumenReservaScreen(

@@ -1,4 +1,4 @@
-package com.example.petshield
+package com.upb.petshield
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -6,17 +6,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.petshield.data.Cita
-import com.example.petshield.data.CitaModel
-import com.example.petshield.data.Clinica
-import com.example.petshield.data.ClinicaModel
-import com.example.petshield.data.DatosReserva
-import com.example.petshield.data.FavoritoModel
-import com.example.petshield.data.FirebaseRepository
-import com.example.petshield.data.Mascota
-import com.example.petshield.data.MascotaModel
-import com.example.petshield.data.ServicioModel
-import com.example.petshield.data.Veterinario
+import com.upb.petshield.data.Cita
+import com.upb.petshield.data.CitaModel
+import com.upb.petshield.data.Clinica
+import com.upb.petshield.data.ClinicaModel
+import com.upb.petshield.data.DatosReserva
+import com.upb.petshield.data.FavoritoModel
+import com.upb.petshield.data.FirebaseRepository
+import com.upb.petshield.data.Mascota
+import com.upb.petshield.data.MascotaModel
+import com.upb.petshield.data.ServicioModel
+import com.upb.petshield.data.Veterinario
 import kotlinx.coroutines.launch
 
 class PetShieldViewModel(
