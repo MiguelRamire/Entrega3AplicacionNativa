@@ -28,6 +28,8 @@ import com.upb.petshield.ui.theme.CelesteTexto
 import com.upb.petshield.ui.theme.FondoClaro
 import com.upb.petshield.ui.theme.TextoMedio
 
+import androidx.compose.runtime.saveable.rememberSaveable
+
 @Composable
 fun ClinicasScreen(
     viewModel: PetShieldViewModel,
@@ -35,7 +37,7 @@ fun ClinicasScreen(
     onSelectClinica: (Clinica) -> Unit,
     onNavigateToTab: (BottomTab) -> Unit
 ) {
-    var searchQuery by remember { mutableStateOf("") }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         viewModel.cargarClinicasDesdeFirebase()

@@ -2,6 +2,7 @@ package com.upb.petshield
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -36,6 +37,9 @@ import com.upb.petshield.ui.theme.TextoMedio
 import com.upb.petshield.ui.theme.TextoPlaceholder
 import com.upb.petshield.ui.theme.TextoSecundario
 
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
+
 @Composable
 fun RegisterScreen(
     viewModel: PetShieldViewModel,
@@ -44,14 +48,14 @@ fun RegisterScreen(
     onRegisterSuccess: () -> Unit
 ) {
     val context = LocalContext.current
-    var name by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var email by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
+    var name by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    var email by rememberSaveable { mutableStateOf("") }
+    var phone by rememberSaveable { mutableStateOf("") }
 
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    var cargando by remember { mutableStateOf(false) }
+    var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
+    var cargando by rememberSaveable { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -235,12 +239,20 @@ fun RegisterScreen(
             // BOTÓN REGISTRARSE
             Button(
                 onClick = {
-                    if (name.isBlank() || email.isBlank() || password.isBlank()) {
-                        errorMessage = "Por favor completa todos los campos obligatorios"
+                    if (name.isBlank()) {
+                        errorMessage = "Por favor ingresa tu nombre completo"
                         return@Button
                     }
-                    if (password.length < 6) {
+                    if (email.isBlank() || !Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) {
+                        errorMessage = "Por favor ingresa un correo electrónico con formato válido"
+                        return@Button
+                    }
+                    if (password.isBlank() || password.length < 6) {
                         errorMessage = "La contraseña debe tener al menos 6 caracteres"
+                        return@Button
+                    }
+                    if (phone.isBlank() || phone.trim().length < 7) {
+                        errorMessage = "Por favor ingresa un número de teléfono válido (mínimo 7 dígitos)"
                         return@Button
                     }
                     cargando = true

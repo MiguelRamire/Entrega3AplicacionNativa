@@ -1,5 +1,6 @@
 package com.upb.petshield
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.filled.Pets
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,33 +45,82 @@ fun ResumenReservaScreen(
     var mascotaSeleccionada by remember(viewModel.mascotas.toList()) {
         mutableStateOf(viewModel.mascotas.firstOrNull())
     }
-    var expandedMascota by remember { mutableStateOf(false) }
+    var expandedMascota by rememberSaveable { mutableStateOf(false) }
 
     // 2. Veterinario seleccionado
     var vetSeleccionado by remember(viewModel.veterinarios.toList()) {
         mutableStateOf(viewModel.veterinarios.firstOrNull())
     }
-    var expandedVet by remember { mutableStateOf(false) }
+    var expandedVet by rememberSaveable { mutableStateOf(false) }
 
     // 3. Hora disponible del veterinario
     val opcionesHoras = remember {
         listOf("8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM")
     }
-    var horaSeleccionada by remember { mutableStateOf("3:00 PM") }
-    var expandedHora by remember { mutableStateOf(false) }
+    var horaSeleccionada by rememberSaveable { mutableStateOf("3:00 PM") }
+    var expandedHora by rememberSaveable { mutableStateOf(false) }
+    var accionPendienteNavegacion by remember { mutableStateOf<(() -> Unit)?>(null) }
+
+    fun intentarNavegarAtras(onConfirm: () -> Unit) {
+        accionPendienteNavegacion = onConfirm
+    }
+
+    BackHandler {
+        accionPendienteNavegacion = onBack
+    }
+
+    if (accionPendienteNavegacion != null) {
+        AlertDialog(
+            onDismissRequest = { accionPendienteNavegacion = null },
+            title = {
+                Text(
+                    text = "¿Salir de la reserva?",
+                    fontWeight = FontWeight.Bold,
+                    color = CelesteTexto
+                )
+            },
+            text = {
+                Text(
+                    text = "Si sales ahora, la cita no quedará agendada.",
+                    fontSize = 14.sp,
+                    color = Color.DarkGray
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        val accion = accionPendienteNavegacion
+                        accionPendienteNavegacion = null
+                        accion?.invoke()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = CelesteFin),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Text("Salir sin reservar", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { accionPendienteNavegacion = null }) {
+                    Text("Permanecer", color = CelesteTexto)
+                }
+            },
+            containerColor = Color.White,
+            shape = RoundedCornerShape(20.dp)
+        )
+    }
 
     Scaffold(
         topBar = {
             PetShieldTopBar(
                 title = "Resumen de reserva",
-                onBack = onBack,
-                onLogoClick = { onNavigateToTab(BottomTab.HOME) }
+                onBack = { intentarNavegarAtras(onBack) },
+                onLogoClick = { intentarNavegarAtras { onNavigateToTab(BottomTab.HOME) } }
             )
         },
         bottomBar = {
             PetShieldBottomBar(
                 currentTab = BottomTab.HOME,
-                onNavigateToTab = onNavigateToTab
+                onNavigateToTab = { tab -> intentarNavegarAtras { onNavigateToTab(tab) } }
             )
         },
         containerColor = Color.White

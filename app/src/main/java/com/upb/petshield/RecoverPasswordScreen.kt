@@ -1,5 +1,6 @@
 package com.upb.petshield
 
+import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -8,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,15 +19,59 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.upb.petshield.ui.theme.CelesteInicio
+import com.upb.petshield.ui.theme.CelesteTexto
+import com.upb.petshield.ui.theme.ErrorRedBg
+import com.upb.petshield.ui.theme.ErrorRedText
 import com.upb.petshield.ui.theme.FondoClaro
 import com.upb.petshield.ui.theme.PetShieldGradient
 
 @Composable
 fun RecoverPasswordScreen(
+    viewModel: PetShieldViewModel,
     onBack: () -> Unit,
     onSubmitEmail: () -> Unit
 ) {
-    var email by remember { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
+    var cargando by rememberSaveable { mutableStateOf(false) }
+    var mostrarExito by rememberSaveable { mutableStateOf(false) }
+
+    if (mostrarExito) {
+        AlertDialog(
+            onDismissRequest = {
+                mostrarExito = false
+                onSubmitEmail()
+            },
+            title = {
+                Text(
+                    text = "Correo Enviado",
+                    fontWeight = FontWeight.Bold,
+                    color = CelesteTexto
+                )
+            },
+            text = {
+                Text(
+                    text = "Hemos enviado un correo a $email con las instrucciones para restablecer tu contraseña.",
+                    fontSize = 14.sp,
+                    color = Color.DarkGray
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        mostrarExito = false
+                        onSubmitEmail()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = CelesteInicio),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Text("Entendido", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            },
+            containerColor = Color.White,
+            shape = RoundedCornerShape(20.dp)
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -73,7 +119,23 @@ fun RecoverPasswordScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
+
+            errorMessage?.let { msg ->
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = ErrorRedBg),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                ) {
+                    Text(
+                        text = msg,
+                        color = ErrorRedText,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
 
             Text(
                 text = "Correo Electrónico",
@@ -87,7 +149,7 @@ fun RecoverPasswordScreen(
 
             OutlinedTextField(
                 value = email,
-                onValueChange = { email = it },
+                onValueChange = { email = it; errorMessage = null },
                 placeholder = { Text("example@example.com", color = CelesteInicio) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -105,7 +167,28 @@ fun RecoverPasswordScreen(
             Spacer(modifier = Modifier.height(48.dp))
 
             Button(
-                onClick = onSubmitEmail,
+                onClick = {
+                    if (email.isBlank()) {
+                        errorMessage = "Por favor ingresa tu correo electrónico"
+                        return@Button
+                    }
+                    if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) {
+                        errorMessage = "Por favor ingresa un correo electrónico con formato válido"
+                        return@Button
+                    }
+                    cargando = true
+                    errorMessage = null
+
+                    viewModel.enviarCorreoRecuperacion(email) { exito, errorMsg ->
+                        cargando = false
+                        if (exito) {
+                            mostrarExito = true
+                        } else {
+                            errorMessage = errorMsg ?: "Error al enviar correo de recuperación"
+                        }
+                    }
+                },
+                enabled = !cargando,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -116,12 +199,16 @@ fun RecoverPasswordScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 contentPadding = PaddingValues()
             ) {
-                Text(
-                    text = "Enviar correo electrónico",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                if (cargando) {
+                    CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
+                } else {
+                    Text(
+                        text = "Enviar correo electrónico",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }

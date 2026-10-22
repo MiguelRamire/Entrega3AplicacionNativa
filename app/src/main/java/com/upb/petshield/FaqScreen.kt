@@ -24,13 +24,15 @@ import com.upb.petshield.ui.theme.CelesteTexto
 import com.upb.petshield.ui.theme.FondoClaro
 import com.upb.petshield.ui.theme.TextoMedio
 
+import androidx.compose.runtime.saveable.rememberSaveable
+
 @Composable
 fun FaqScreen(
     onBack: () -> Unit,
     onNavigateToTab: (BottomTab) -> Unit
 ) {
-    var searchQuery by remember { mutableStateOf("") }
-    var selectedTab by remember { mutableStateOf(0) }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    var selectedTab by rememberSaveable { mutableStateOf(0) }
 
     val faqItems = remember {
         listOf(

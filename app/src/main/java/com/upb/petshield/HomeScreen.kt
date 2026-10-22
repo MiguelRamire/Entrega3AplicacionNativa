@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,7 +64,7 @@ fun HomeScreen(
         }
     }
 
-    var diaSeleccionadoCitas by remember {
+    var diaSeleccionadoCitas by rememberSaveable {
         mutableStateOf(diasSemanaDinamicos.firstOrNull { it.third }?.first ?: diasSemanaDinamicos.first().first)
     }
 
@@ -92,8 +93,8 @@ fun HomeScreen(
         lista.chunked(7)
     }
 
-    var showNotifDialog by remember { mutableStateOf(false) }
-    var diaSeleccionadoCalendar by remember { mutableStateOf<String?>(null) }
+    var showNotifDialog by rememberSaveable { mutableStateOf(false) }
+    var diaSeleccionadoCalendar by rememberSaveable { mutableStateOf<String?>(null) }
 
     if (showNotifDialog) {
         AlertDialog(

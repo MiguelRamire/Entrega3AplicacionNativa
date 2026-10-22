@@ -8,7 +8,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.upb.petshield.data.Clinica
@@ -34,6 +37,61 @@ sealed class Screen {
     object Carnet : Screen()
     object AgregarMascota : Screen()
 }
+
+val ScreenSaver = Saver<Screen, String>(
+    save = { screen ->
+        when (screen) {
+            is Screen.Splash -> "Splash"
+            is Screen.Welcome -> "Welcome"
+            is Screen.Login -> "Login"
+            is Screen.Recover -> "Recover"
+            is Screen.Register -> "Register:${screen.fromLogin}"
+            is Screen.Onboarding -> "Onboarding"
+            is Screen.Home -> "Home"
+            is Screen.Clinicas -> "Clinicas"
+            is Screen.DetalleServicio -> "DetalleServicio"
+            is Screen.ResumenReserva -> "ResumenReserva"
+            is Screen.Favoritos -> "Favoritos"
+            is Screen.Perfil -> "Perfil"
+            is Screen.Faq -> "Faq"
+            is Screen.TodasCitas -> "TodasCitas"
+            is Screen.CancelarCita -> "CancelarCita"
+            is Screen.Carnet -> "Carnet"
+            is Screen.AgregarMascota -> "AgregarMascota"
+        }
+    },
+    restore = { str ->
+        when {
+            str == "Splash" -> Screen.Splash
+            str == "Welcome" -> Screen.Welcome
+            str == "Login" -> Screen.Login
+            str == "Recover" -> Screen.Recover
+            str.startsWith("Register:") -> Screen.Register(str.substringAfter("Register:").toBooleanStrictOrNull() ?: false)
+            str == "Onboarding" -> Screen.Onboarding
+            str == "Home" -> Screen.Home
+            str == "Clinicas" -> Screen.Clinicas
+            str == "DetalleServicio" -> Screen.DetalleServicio
+            str == "ResumenReserva" -> Screen.ResumenReserva
+            str == "Favoritos" -> Screen.Favoritos
+            str == "Perfil" -> Screen.Perfil
+            str == "Faq" -> Screen.Faq
+            str == "TodasCitas" -> Screen.TodasCitas
+            str == "CancelarCita" -> Screen.CancelarCita
+            str == "Carnet" -> Screen.Carnet
+            str == "AgregarMascota" -> Screen.AgregarMascota
+            else -> Screen.Splash
+        }
+    }
+)
+
+val backStackSaver = listSaver<SnapshotStateList<Screen>, String>(
+    save = { list -> list.map { with(ScreenSaver) { save(it) } ?: "Splash" } },
+    restore = { savedList ->
+        mutableStateListOf<Screen>().apply {
+            addAll(savedList.map { ScreenSaver.restore(it) ?: Screen.Splash })
+        }
+    }
+)
 
 fun comprobarOnboardingCompletado(context: Context): Boolean {
     val prefs = context.getSharedPreferences("petshield_prefs", Context.MODE_PRIVATE)
@@ -61,7 +119,7 @@ class MainActivity : ComponentActivity() {
 fun PetShieldApp(
     viewModel: PetShieldViewModel = viewModel()
 ) {
-    val backStack = remember { mutableStateListOf<Screen>(Screen.Splash) }
+    val backStack = rememberSaveable(saver = backStackSaver) { mutableStateListOf<Screen>(Screen.Splash) }
     val currentScreen = backStack.lastOrNull() ?: Screen.Splash
 
     fun navigateTo(screen: Screen) {
@@ -144,6 +202,7 @@ fun PetShieldApp(
 
         is Screen.Recover -> {
             RecoverPasswordScreen(
+                viewModel = viewModel,
                 onBack = { popBack() },
                 onSubmitEmail = { popBack() }
             )

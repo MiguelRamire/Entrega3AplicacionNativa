@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import com.upb.petshield.data.Cita
 import com.upb.petshield.ui.theme.CelesteFin
 import com.upb.petshield.ui.theme.CelesteTexto
+import com.upb.petshield.ui.theme.ErrorRedText
 import com.upb.petshield.ui.theme.FondoClaro
 import com.upb.petshield.ui.theme.TextoMedio
 import com.upb.petshield.ui.theme.TextoSecundario
@@ -53,8 +55,9 @@ fun TodasCitasScreen(
     onCancelarCita: (Cita) -> Unit,
     onNavigateToTab: (BottomTab) -> Unit
 ) {
-    var selectedTab by remember { mutableStateOf(0) } // 0: Próximas, 1: Anteriores
-    var showConfirmDialog by remember { mutableStateOf(false) }
+    var selectedTab by rememberSaveable { mutableStateOf(0) } // 0: Próximas, 1: Anteriores
+    var showConfirmDialog by rememberSaveable { mutableStateOf(false) }
+    var citaParaCancelar by remember { mutableStateOf<Cita?>(null) }
 
     if (showConfirmDialog) {
         AlertDialog(
@@ -83,6 +86,47 @@ fun TodasCitasScreen(
                     shape = RoundedCornerShape(20.dp)
                 ) {
                     Text("Entendido", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            },
+            containerColor = Color.White,
+            shape = RoundedCornerShape(20.dp)
+        )
+    }
+
+    citaParaCancelar?.let { cita ->
+        AlertDialog(
+            onDismissRequest = { citaParaCancelar = null },
+            title = {
+                Text(
+                    text = "¿Deseas cancelar esta cita?",
+                    fontWeight = FontWeight.Bold,
+                    color = CelesteTexto
+                )
+            },
+            text = {
+                Text(
+                    text = "Irás a la pantalla de cancelación para especificar el motivo de la cita con ${cita.vetNombre}.",
+                    fontSize = 14.sp,
+                    color = Color.DarkGray
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        val target = cita
+                        citaParaCancelar = null
+                        viewModel.citaACancelar = target
+                        onCancelarCita(target)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = ErrorRedText),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Text("Sí, cancelar cita", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { citaParaCancelar = null }) {
+                    Text("Volver", color = CelesteTexto)
                 }
             },
             containerColor = Color.White,
@@ -132,7 +176,7 @@ fun TodasCitasScreen(
                     border = BorderStroke(1.dp, CelesteFin)
                 ) {
                     Text(
-                        text = "Proximas",
+                        text = "Próximas",
                         color = if (selectedTab == 0) Color.White else CelesteTexto,
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
@@ -187,8 +231,7 @@ fun TodasCitasScreen(
                                 showConfirmDialog = true
                             },
                             onCancelar = {
-                                viewModel.citaACancelar = cita
-                                onCancelarCita(cita)
+                                citaParaCancelar = cita
                             }
                         )
                         HorizontalDivider(color = FondoClaro, thickness = 1.dp)
@@ -338,7 +381,7 @@ fun CitaItemCard(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
-                        contentDescription = "Cancelar",
+                        contentDescription = "Cancelar Cita",
                         tint = CelesteFin,
                         modifier = Modifier.size(18.dp)
                     )

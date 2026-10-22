@@ -129,6 +129,17 @@ class FirebaseRepository(
             }
     }
 
+    suspend fun enviarCorreoRecuperacion(email: String): Result<Unit> = runCatching {
+        auth.sendPasswordResetEmail(email.trim()).await()
+        Unit
+    }
+
+    fun enviarCorreoRecuperacion(email: String, onResult: (Boolean, String?) -> Unit) {
+        auth.sendPasswordResetEmail(email.trim())
+            .addOnSuccessListener { onResult(true, null) }
+            .addOnFailureListener { e -> onResult(false, e.localizedMessage ?: "Error al enviar correo de recuperación") }
+    }
+
     // ==========================================
     // 1. USUARIOS
     // ==========================================

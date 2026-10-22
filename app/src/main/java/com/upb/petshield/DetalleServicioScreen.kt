@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.sp
 import com.upb.petshield.data.ServicioModel
 import com.upb.petshield.ui.theme.CelesteFin
 import com.upb.petshield.ui.theme.CelesteTexto
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.upb.petshield.ui.theme.FondoClaro
 import com.upb.petshield.ui.theme.PetShieldGradient
 import com.upb.petshield.ui.theme.TextoMedio
@@ -48,10 +50,10 @@ fun DetalleServicioScreen(
         mutableStateOf(viewModel.servicios.firstOrNull() ?: ServicioModel())
     }
 
-    var fechaSeleccionada by remember { mutableStateOf("Miércoles, 23 De Septiembre") }
+    var fechaSeleccionada by rememberSaveable { mutableStateOf("Miércoles, 23 De Septiembre") }
 
-    var expandedServicio by remember { mutableStateOf(false) }
-    var expandedFecha by remember { mutableStateOf(false) }
+    var expandedServicio by rememberSaveable { mutableStateOf(false) }
+    var expandedFecha by rememberSaveable { mutableStateOf(false) }
 
     val context = LocalContext.current
     val calendar = Calendar.getInstance()

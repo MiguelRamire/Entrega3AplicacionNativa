@@ -1,6 +1,7 @@
 package com.upb.petshield
 
 import android.app.DatePickerDialog
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.upb.petshield.data.Mascota
 import com.upb.petshield.ui.theme.CelesteFin
+import com.upb.petshield.ui.theme.CelesteTexto
+import com.upb.petshield.ui.theme.ErrorRedBg
+import com.upb.petshield.ui.theme.ErrorRedText
 import com.upb.petshield.ui.theme.FondoClaro
 import com.upb.petshield.ui.theme.PetShieldGradient
 import com.upb.petshield.ui.theme.TextoMedio
@@ -39,18 +44,22 @@ fun AgregarMascotaScreen(
     onNavigateToCarnet: () -> Unit,
     onNavigateToTab: (BottomTab) -> Unit
 ) {
-    var nombre by remember { mutableStateOf("") }
-    var especie by remember { mutableStateOf("") }
-    var raza by remember { mutableStateOf("") }
-    var peso by remember { mutableStateOf("") }
-    var fechaNacimiento by remember { mutableStateOf("") }
-    var sexo by remember { mutableStateOf("") }
+    var nombre by rememberSaveable { mutableStateOf("") }
+    var especie by rememberSaveable { mutableStateOf("") }
+    var raza by rememberSaveable { mutableStateOf("") }
+    var peso by rememberSaveable { mutableStateOf("") }
+    var fechaNacimiento by rememberSaveable { mutableStateOf("") }
+    var sexo by rememberSaveable { mutableStateOf("") }
 
-    var expandedEspecie by remember { mutableStateOf(false) }
+    var expandedEspecie by rememberSaveable { mutableStateOf(false) }
     val especiesOpciones = listOf("Perro", "Gato", "Ave", "Roedor", "Reptil", "Otro")
 
-    var expandedSexo by remember { mutableStateOf(false) }
+    var expandedSexo by rememberSaveable { mutableStateOf(false) }
     val sexoOpciones = listOf("Macho", "Hembra")
+
+    var errorMessage by rememberSaveable { mutableStateOf<String?>(null) }
+    var estaGuardada by rememberSaveable { mutableStateOf(false) }
+    var mostrarConfirmacionSalir by rememberSaveable { mutableStateOf(false) }
 
     val context = LocalContext.current
     val calendar = Calendar.getInstance()
@@ -66,20 +75,71 @@ fun AgregarMascotaScreen(
         calendar.get(Calendar.DAY_OF_MONTH)
     )
 
-    var estaGuardada by remember { mutableStateOf(false) }
+    val tieneCambiosSinGuardar = (nombre.isNotBlank() || especie.isNotBlank() || raza.isNotBlank()) && !estaGuardada
+
+    fun intentarNavegarAtras(onConfirm: () -> Unit) {
+        if (tieneCambiosSinGuardar) {
+            mostrarConfirmacionSalir = true
+        } else {
+            onConfirm()
+        }
+    }
+
+    BackHandler(enabled = tieneCambiosSinGuardar) {
+        mostrarConfirmacionSalir = true
+    }
+
+    if (mostrarConfirmacionSalir) {
+        AlertDialog(
+            onDismissRequest = { mostrarConfirmacionSalir = false },
+            title = {
+                Text(
+                    text = "¿Salir sin guardar?",
+                    fontWeight = FontWeight.Bold,
+                    color = CelesteTexto
+                )
+            },
+            text = {
+                Text(
+                    text = "Has ingresado datos de la mascota. Si sales ahora, se perderá el progreso.",
+                    fontSize = 14.sp,
+                    color = Color.DarkGray
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        mostrarConfirmacionSalir = false
+                        onBack()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = CelesteFin),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Text("Salir sin guardar", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { mostrarConfirmacionSalir = false }) {
+                    Text("Permanecer", color = CelesteTexto)
+                }
+            },
+            containerColor = Color.White,
+            shape = RoundedCornerShape(20.dp)
+        )
+    }
 
     Scaffold(
         topBar = {
             PetShieldTopBar(
                 title = "Agregar Mascota",
-                onBack = onBack,
-                onLogoClick = { onNavigateToTab(BottomTab.HOME) }
+                onBack = { intentarNavegarAtras(onBack) },
+                onLogoClick = { intentarNavegarAtras { onNavigateToTab(BottomTab.HOME) } }
             )
         },
         bottomBar = {
             PetShieldBottomBar(
                 currentTab = BottomTab.CITAS,
-                onNavigateToTab = onNavigateToTab
+                onNavigateToTab = { tab -> intentarNavegarAtras { onNavigateToTab(tab) } }
             )
         },
         containerColor = Color.White
@@ -123,12 +183,28 @@ fun AgregarMascotaScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            FormFieldLabel(label = "Nombre de tu mascota")
+            errorMessage?.let { msg ->
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = ErrorRedBg),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 12.dp)
+                ) {
+                    Text(
+                        text = msg,
+                        color = ErrorRedText,
+                        fontSize = 14.sp,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+
+            FormFieldLabel(label = "Nombre de tu mascota *")
             OutlinedTextField(
                 value = nombre,
-                onValueChange = { nombre = it },
+                onValueChange = { nombre = it; errorMessage = null },
                 placeholder = { Text("Ej. Max", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -137,11 +213,11 @@ fun AgregarMascotaScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            FormFieldLabel(label = "Especie")
+            FormFieldLabel(label = "Especie *")
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
                     value = especie,
-                    onValueChange = { especie = it },
+                    onValueChange = { especie = it; errorMessage = null },
                     placeholder = { Text("Selecciona o escribe...", color = TextoPlaceholder) },
                     modifier = Modifier.fillMaxWidth(),
                     trailingIcon = {
@@ -165,6 +241,7 @@ fun AgregarMascotaScreen(
                             onClick = {
                                 especie = opcion
                                 expandedEspecie = false
+                                errorMessage = null
                             }
                         )
                     }
@@ -173,10 +250,10 @@ fun AgregarMascotaScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            FormFieldLabel(label = "Raza")
+            FormFieldLabel(label = "Raza *")
             OutlinedTextField(
                 value = raza,
-                onValueChange = { raza = it },
+                onValueChange = { raza = it; errorMessage = null },
                 placeholder = { Text("Ej. Golden Retriever", color = TextoPlaceholder) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(12.dp),
@@ -254,19 +331,30 @@ fun AgregarMascotaScreen(
 
             Button(
                 onClick = {
-                    if (nombre.isNotBlank()) {
-                        val nuevaMascota = Mascota(
-                            id = (viewModel.mascotas.size + 1).toString(),
-                            nombre = nombre,
-                            especie = especie,
-                            raza = raza,
-                            peso = peso,
-                            fechaNacimiento = fechaNacimiento,
-                            sexo = sexo
-                        )
-                        viewModel.agregarMascota(nuevaMascota)
-                        estaGuardada = true
+                    if (nombre.isBlank()) {
+                        errorMessage = "Por favor ingresa el nombre de la mascota"
+                        return@Button
                     }
+                    if (especie.isBlank()) {
+                        errorMessage = "Por favor selecciona o escribe la especie"
+                        return@Button
+                    }
+                    if (raza.isBlank()) {
+                        errorMessage = "Por favor ingresa la raza de la mascota"
+                        return@Button
+                    }
+                    val nuevaMascota = Mascota(
+                        id = (viewModel.mascotas.size + 1).toString(),
+                        nombre = nombre.trim(),
+                        especie = especie.trim(),
+                        raza = raza.trim(),
+                        peso = peso.ifBlank { "No especificado" },
+                        fechaNacimiento = fechaNacimiento.ifBlank { "No especificada" },
+                        sexo = sexo.ifBlank { "Macho" }
+                    )
+                    viewModel.agregarMascota(nuevaMascota)
+                    estaGuardada = true
+                    errorMessage = null
                 },
                 modifier = Modifier
                     .align(Alignment.Start)
@@ -294,14 +382,14 @@ fun AgregarMascotaScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = "Mascota guardada",
+                            text = "¡Mascota Guardada!",
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.Black
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "$nombre ya está registrado.\nPuedes completar su carnet.",
+                            text = "$nombre ya está registrado en PetShield.\nPuedes consultar su carnet de vacunas.",
                             fontSize = 14.sp,
                             color = TextoMedio,
                             textAlign = TextAlign.Center
@@ -322,7 +410,7 @@ fun AgregarMascotaScreen(
                             contentPadding = PaddingValues()
                         ) {
                             Text(
-                                text = "Ir al carnet",
+                                text = "Ir al carnet de vacunas",
                                 color = Color.White,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold

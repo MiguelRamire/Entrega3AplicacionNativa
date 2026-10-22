@@ -1,5 +1,6 @@
 package com.upb.petshield
 
+import android.util.Patterns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -167,6 +168,18 @@ class PetShieldViewModel(
                 onResult(false, error.localizedMessage ?: "Error al registrar el usuario")
             }
         }
+    }
+
+    fun enviarCorreoRecuperacion(email: String, onResult: (Boolean, String?) -> Unit) {
+        if (email.isBlank()) {
+            onResult(false, "Por favor ingresa tu correo electrónico")
+            return
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) {
+            onResult(false, "Por favor ingresa un correo electrónico válido")
+            return
+        }
+        repository.enviarCorreoRecuperacion(email, onResult)
     }
 
     fun cerrarSesion() {
@@ -613,10 +626,10 @@ class PetShieldViewModel(
         }
     }
 
-    fun cancelarCita(id: String) {
+    fun cancelarCita(id: String, motivo: String = "Cancelada por el usuario") {
         citas.removeAll { it.id == id }
         viewModelScope.launch {
-            repository.cancelarCita(id, "Cancelada por el usuario")
+            repository.cancelarCita(id, motivo)
             cargarCitasDesdeFirebase()
         }
     }
